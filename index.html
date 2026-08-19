@@ -11,8 +11,10 @@
   <meta name="apple-mobile-web-app-title" content="SHINSA">
   <meta name="theme-color" content="#0f172a">
 
-  <!-- Icons & Manifest -->
-  <link rel="apple-touch-icon" href="/icons/apple-touch-icon-180x180.png">
+  <!-- Custom User Icon for iOS and Android -->
+  <link rel="icon" type="image/png" href="/apple-touch-icon.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="manifest" href="/manifest.json">
 
   <style>
@@ -41,6 +43,15 @@
     .header {
       text-align: center;
       margin-bottom: 24px;
+    }
+
+    .app-logo {
+      width: 80px;
+      height: 80px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+      object-fit: cover;
     }
 
     .header h1 {
@@ -136,6 +147,7 @@
 
   <div class="container">
     <div class="header">
+      <img src="/apple-touch-icon.png" alt="SHINSA Logo" class="app-logo" onerror="this.style.display='none'">
       <h1>SHINSA CLOUD</h1>
       <p>Real-Time Threat Intelligence & Analysis</p>
     </div>
@@ -155,7 +167,6 @@
   </div>
 
   <script>
-    // 1. Register PWA Service Worker
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js');
