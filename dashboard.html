@@ -1,499 +1,575 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>SHINSA Mobile Security</title>
-    
-    <link rel="manifest" href="manifest.json">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="SHINSA">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>SHINSA MOBILE</title>
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #050608;
-            user-select: none;
-            color: #cbd5e1;
-            padding-top: env(safe-area-inset-top, 12px);
-            padding-bottom: calc(85px + env(safe-area-inset-bottom, 0px));
-        }
-        .font-cinzel { font-family: 'Cinzel', serif; }
-        .gold-text {
-            background: linear-gradient(180deg, #fff3c4 0%, #d4af37 55%, #967425 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .btn-gold {
-            background: linear-gradient(180deg, #d8b248 0%, #997523 100%);
-            border: 1px solid #ffdf79;
-            color: #0b0c0e;
-            text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
-            transition: transform 0.15s ease;
-        }
-        .btn-gold:active { transform: scale(0.97); }
-        .radar-sweep {
-            animation: rotateRadar 2.5s linear infinite;
-            transform-origin: center center;
-        }
-        @keyframes rotateRadar {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-        .glass-panel {
-            background: rgba(14, 16, 22, 0.92);
-            border: 1px solid rgba(212, 175, 55, 0.25);
-            backdrop-filter: blur(16px);
-        }
-        .bottom-nav-item.active { color: #f7e089; }
-        .bottom-nav-item.active i { filter: drop-shadow(0 0 6px rgba(212, 175, 55, 0.8)); }
-        
-        @keyframes slideUp {
-            from { transform: translateY(100%); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-        .animate-slide-up {
-            animation: slideUp 0.5s ease-out forwards;
-        }
-    </style>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="SHINSA">
+  <meta name="theme-color" content="#070709">
+
+  <link rel="icon" type="image/png" href="/apple-touch-icon.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/manifest.json">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: #070709;
+      color: #ffffff;
+      min-height: 100vh;
+      display: block;
+      padding: 14px;
+      padding-top: calc(env(safe-area-inset-top) + 12px);
+      padding-bottom: calc(env(safe-area-inset-bottom) + 85px);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 440px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      border: 1px solid rgba(212, 175, 55, 0.25);
+      border-radius: 12px;
+      background: #0d0d12;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #dfbe6b;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+
+    .status-online {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 10px;
+      font-weight: 700;
+      color: #10b981;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      padding: 4px 10px;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      background: #10b981;
+      border-radius: 50%;
+    }
+
+    .tab-content {
+      display: none;
+      flex-direction: column;
+      gap: 14px;
+      width: 100%;
+    }
+
+    .tab-content.active-view {
+      display: flex !important;
+    }
+
+    .fortress-card {
+      background: #0e0e13;
+      border: 1px solid rgba(212, 175, 55, 0.25);
+      border-radius: 16px;
+      padding: 22px 16px 16px;
+      text-align: center;
+    }
+
+    .emblem-box {
+      width: 92px;
+      height: 92px;
+      margin: 0 auto 16px;
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      border-radius: 20px;
+      background: #14141a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .emblem-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .fortress-title {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: #dfbe6b;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .fortress-status {
+      font-size: 16px;
+      font-weight: 800;
+      color: #10b981;
+      letter-spacing: 0.8px;
+      margin-bottom: 6px;
+    }
+
+    .fortress-node {
+      font-size: 9px;
+      font-weight: 600;
+      color: #9ca3af;
+      letter-spacing: 0.5px;
+      margin-bottom: 16px;
+    }
+
+    .fortress-meta {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      background: #07070a;
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 11px;
+      color: #9ca3af;
+    }
+
+    .fortress-meta strong {
+      color: #dfbe6b;
+    }
+
+    .fortress-meta strong.green {
+      color: #10b981;
+    }
+
+    .divider {
+      width: 1px;
+      height: 14px;
+      background: rgba(212, 175, 55, 0.2);
+    }
+
+    .panel {
+      background: #0e0e13;
+      border: 1px solid rgba(212, 175, 55, 0.25);
+      border-radius: 14px;
+      padding: 14px;
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .panel-title {
+      font-size: 11px;
+      font-weight: 800;
+      color: #dfbe6b;
+      letter-spacing: 0.8px;
+    }
+
+    .panel-tag {
+      font-size: 9px;
+      font-weight: 800;
+      color: #dfbe6b;
+    }
+
+    .panel-desc {
+      font-size: 11px;
+      color: #8e8a7b;
+      line-height: 1.4;
+      margin-bottom: 12px;
+    }
+
+    .choose-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-choose {
+      background: #2a220e;
+      border: 1px solid #dfbe6b;
+      color: #dfbe6b;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .file-name {
+      font-size: 11px;
+      color: #71717a;
+    }
+
+    .suite-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .suite-box {
+      background: #07070a;
+      border: 1px solid rgba(212, 175, 55, 0.15);
+      border-radius: 10px;
+      padding: 14px 6px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .suite-icon {
+      font-size: 18px;
+    }
+
+    .suite-name {
+      font-size: 9px;
+      font-weight: 800;
+      color: #dfbe6b;
+      letter-spacing: 0.5px;
+    }
+
+    .suite-status {
+      font-size: 9px;
+      font-weight: 800;
+      color: #10b981;
+    }
+
+    .bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #07070a;
+      border-top: 1px solid rgba(212, 175, 55, 0.2);
+      display: flex;
+      justify-content: space-around;
+      padding-top: 10px;
+      padding-bottom: calc(env(safe-area-inset-bottom) + 10px);
+      z-index: 1000;
+    }
+
+    .nav-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      font-size: 9px;
+      font-weight: 700;
+      color: #52525b;
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
+
+    .nav-link.active {
+      color: #dfbe6b;
+    }
+
+    .nav-icon {
+      font-size: 16px;
+    }
+
+    #scanResult {
+      margin-top: 10px;
+      font-size: 11px;
+      padding: 8px;
+      border-radius: 6px;
+      display: none;
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      background: #07070a;
+    }
+
+    .item-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .list-entry {
+      background: #07070a;
+      border: 1px solid rgba(212, 175, 55, 0.15);
+      border-radius: 8px;
+      padding: 10px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+    }
+
+    .list-entry-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .list-entry-title {
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    .list-entry-sub {
+      font-size: 9px;
+      color: #71717a;
+    }
+
+    .badge-tag {
+      font-size: 9px;
+      font-weight: 800;
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+
+    .badge-green {
+      background: rgba(16, 185, 129, 0.15);
+      color: #10b981;
+    }
+
+    .badge-gold {
+      background: rgba(223, 190, 107, 0.15);
+      color: #dfbe6b;
+    }
+  </style>
 </head>
-<body class="p-3">
+<body>
 
-    <header class="h-14 flex items-center justify-between px-4 rounded-xl border border-amber-900/40 bg-black/80 backdrop-blur-md mb-3 sticky top-2 z-40">
-        <div class="flex items-center gap-2.5">
-            <i class="fa-solid fa-shield-halved text-amber-400 text-lg"></i>
-            <span class="font-cinzel text-xs font-bold tracking-wider gold-text">SHINSA MOBILE</span>
-        </div>
-        <div id="cloud-badge" class="flex items-center gap-1.5 text-amber-400 bg-amber-950/40 px-2.5 py-1 rounded-full border border-amber-500/30 text-[10px] font-cinzel font-bold">
-            <span id="cloud-dot" class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
-            <span id="cloud-status-text">CONNECTING...</span>
-        </div>
-    </header>
+  <div class="container">
 
-    <div id="pwa-install-prompt" class="hidden fixed bottom-20 left-3 right-3 z-50 glass-panel p-4 rounded-2xl border border-amber-400/60 shadow-[0_0_30px_rgba(212,175,55,0.25)] animate-slide-up">
-        <div class="flex items-center justify-between mb-2.5">
-            <div class="flex items-center gap-2.5">
-                <div class="w-10 h-10 rounded-xl border border-amber-400/60 bg-black flex items-center justify-center shadow">
-                    <i class="fa-solid fa-shield-halved text-amber-400 text-lg"></i>
-                </div>
-                <div>
-                    <div class="font-cinzel text-xs font-bold gold-text">Install SHINSA App</div>
-                    <div class="text-[9px] text-slate-400">Add to Home Screen for fast standalone access</div>
-                </div>
-            </div>
-            <button onclick="closeInstallPrompt()" class="text-slate-400 hover:text-white p-1 text-sm">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-        </div>
-        <div class="bg-black/70 rounded-xl p-2.5 text-[10px] text-slate-300 space-y-1.5 border border-amber-900/30">
-            <div class="flex items-center gap-2">
-                <i class="fa-solid fa-arrow-up-from-square text-amber-400"></i>
-                <span>1. Tap the <b class="text-white">Share</b> button in Safari bar.</span>
-            </div>
-            <div class="flex items-center gap-2">
-                <i class="fa-solid fa-plus-square text-amber-400"></i>
-                <span>2. Select <b class="text-white">Add to Home Screen</b>.</span>
-            </div>
-        </div>
+    <div class="top-bar">
+      <div class="brand">
+        <span>🛡️</span>
+        <span>SHINSA MOBILE</span>
+      </div>
+      <div class="status-online">
+        <span class="dot"></span>
+        <span>ONLINE</span>
+      </div>
     </div>
 
-    <div id="tab-dashboard" class="tab-content space-y-3">
-        <div class="glass-panel rounded-xl p-4 text-center">
-            
-            <div class="w-24 h-24 mx-auto mb-2 flex items-center justify-center relative">
-                <div class="absolute inset-0 rounded-2xl bg-amber-500/10 border border-amber-400/30 shadow-[0_0_25px_rgba(212,175,55,0.25)] flex items-center justify-center">
-                    <svg class="w-20 h-16 text-amber-400" viewBox="0 0 400 120" fill="currentColor">
-                        <circle cx="200" cy="60" r="20" fill="#d4af37" stroke="#fce09b" stroke-width="2"/>
-                        <circle cx="200" cy="60" r="12" fill="#1b1610"/>
-                        <path d="M200 48 L203 57 L212 60 L203 63 L200 72 L197 63 L188 60 L197 57 Z" fill="#fce09b"/>
-                        <path d="M175 55 C140 48, 80 38, 10 48 C50 58, 110 65, 175 65 Z" fill="#d4af37"/>
-                        <path d="M175 65 C130 76, 90 78, 45 90 C90 90, 135 86, 175 79 Z" fill="#b38a20"/>
-                        <path d="M225 55 C260 48, 320 38, 390 48 C350 58, 290 65, 225 65 Z" fill="#d4af37"/>
-                        <path d="M225 65 C270 76, 310 78, 355 90 C310 90, 265 86, 225 79 Z" fill="#b38a20"/>
-                    </svg>
-                </div>
-            </div>
+    <!-- VIEW 1: SHIELD -->
+    <div id="view-shield" class="tab-content active-view">
+      <div class="fortress-card">
+        <div class="emblem-box">
+          <img src="/apple-touch-icon.png" alt="Logo" onerror="this.style.display='none'">
+        </div>
+        <div class="fortress-title">THE FORTRESS OF SHINSA</div>
+        <div class="fortress-status">SYSTEM IS PROTECTED</div>
+        <div class="fortress-node">NODE: SYD-EDGE-01 | 3.0.0-ENTERPRISE-AI</div>
 
-            <div class="text-[10px] tracking-[0.25em] font-cinzel text-amber-300 uppercase font-semibold">THE FORTRESS OF SHINSA</div>
-            
-            <div class="font-cinzel text-sm font-extrabold tracking-widest text-emerald-400 mt-2">
-                SYSTEM IS PROTECTED
-            </div>
-            <div id="cloud-node-info" class="text-[10px] text-amber-200/60 font-cinzel mt-0.5">CONNECTING TO SYDNEY NODE...</div>
+        <div class="fortress-meta">
+          <div>Signatures: <strong>6 Signatures</strong></div>
+          <div class="divider"></div>
+          <div>Threats: <strong class="green">0 In Vault</strong></div>
+        </div>
+      </div>
 
-            <div class="mt-3 flex items-center justify-around bg-black/60 py-2 px-3 rounded-lg border border-amber-900/30 text-[10px]">
-                <div>
-                    <span class="text-slate-400">Signatures:</span>
-                    <b id="sig-count" class="text-amber-300 ml-1">Loading...</b>
-                </div>
-                <div class="h-3 w-[1px] bg-amber-900/50"></div>
-                <div>
-                    <span class="text-slate-400">Threats:</span>
-                    <b id="threats-blocked-count" class="text-emerald-400 ml-1">0 In Vault</b>
-                </div>
-            </div>
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">FILE INTEGRITY CHECK</div>
+          <div class="panel-tag">ON-DEMAND</div>
+        </div>
+        <div class="panel-desc">Inspect any document or executable against the Cloud Intelligence Matrix.</div>
+
+        <div class="choose-row">
+          <button class="btn-choose" onclick="document.getElementById('fileChooser').click()">Choose File</button>
+          <span class="file-name" id="selectedFileName">no file selected</span>
+          <input type="file" id="fileChooser" style="display: none;" onchange="inspectFile(event)">
         </div>
 
-        <div class="glass-panel rounded-xl p-3">
-            <div class="font-cinzel text-[11px] font-bold text-amber-300 mb-1.5 flex items-center justify-between">
-                <span>FILE INTEGRITY CHECK</span>
-                <span class="text-[8px] text-amber-400 font-mono">ON-DEMAND</span>
-            </div>
-            <p class="text-[10px] text-slate-400 mb-2">Inspect any document or executable against the Cloud Intelligence Matrix.</p>
-            <input type="file" id="file-uploader" onchange="handleManualFileUpload(this)" class="text-[10px] text-slate-400 file:mr-2 file:py-1 file:px-2.5 file:rounded-md file:border-0 file:text-[10px] file:font-semibold file:bg-amber-500/20 file:text-amber-300 hover:file:bg-amber-500/30 cursor-pointer w-full"/>
+        <div id="scanResult"></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">ACTIVE DEFENSE SUITE</div>
         </div>
 
-        <div class="glass-panel rounded-xl p-3">
-            <div class="font-cinzel text-[11px] font-bold text-amber-300 mb-2 border-b border-amber-900/30 pb-1">
-                ACTIVE DEFENSE SUITE
-            </div>
-            <div class="grid grid-cols-3 gap-2">
-                <div class="p-2.5 rounded-lg bg-black/50 border border-amber-900/30 text-center">
-                    <i class="fa-solid fa-brain text-amber-400 text-sm mb-1"></i>
-                    <div class="text-[9px] font-cinzel font-bold text-amber-200">AI CORE</div>
-                    <span class="text-[8px] text-emerald-400">ONLINE</span>
-                </div>
-                <div class="p-2.5 rounded-lg bg-black/50 border border-amber-900/30 text-center">
-                    <i class="fa-solid fa-shield-virus text-amber-400 text-sm mb-1"></i>
-                    <div class="text-[9px] font-cinzel font-bold text-amber-200">RANSOM</div>
-                    <span class="text-[8px] text-emerald-400">ARMED</span>
-                </div>
-                <div class="p-2.5 rounded-lg bg-black/50 border border-amber-900/30 text-center">
-                    <i class="fa-solid fa-globe text-amber-400 text-sm mb-1"></i>
-                    <div class="text-[9px] font-cinzel font-bold text-amber-200">WEB SHIELD</div>
-                    <span class="text-[8px] text-emerald-400">ACTIVE</span>
-                </div>
-            </div>
+        <div class="suite-grid">
+          <div class="suite-box">
+            <span class="suite-icon">🧠</span>
+            <span class="suite-name">AI CORE</span>
+            <span class="suite-status">ONLINE</span>
+          </div>
+          <div class="suite-box">
+            <span class="suite-icon">🛡️</span>
+            <span class="suite-name">RANSOM</span>
+            <span class="suite-status">ARMED</span>
+          </div>
+          <div class="suite-box">
+            <span class="suite-icon">🌐</span>
+            <span class="suite-name">WEB SHIELD</span>
+            <span class="suite-status">ACTIVE</span>
+          </div>
         </div>
+      </div>
     </div>
 
-    <div id="tab-scanner" class="tab-content hidden space-y-3">
-        <div class="glass-panel rounded-xl p-4 text-center">
-            <div class="font-cinzel text-xs font-bold text-amber-300 tracking-wider mb-3">CLOUD REAL-TIME SCANNER</div>
-            
-            <div class="w-32 h-32 mx-auto relative rounded-full border border-amber-500/40 bg-black overflow-hidden flex items-center justify-center">
-                <div class="absolute w-24 h-24 rounded-full border border-amber-500/20"></div>
-                <div class="absolute w-14 h-14 rounded-full border border-amber-500/20"></div>
-                <div class="absolute w-full h-[1px] bg-amber-500/20"></div>
-                <div class="absolute h-full w-[1px] bg-amber-500/20"></div>
-
-                <div class="absolute inset-0 radar-sweep">
-                    <div class="w-1/2 h-1/2 bg-gradient-to-br from-amber-400/50 via-amber-400/10 to-transparent origin-bottom-right rounded-tl-full"></div>
-                </div>
-
-                <i class="fa-solid fa-magnifying-glass text-amber-400 text-lg relative z-10"></i>
-            </div>
-
-            <div class="grid grid-cols-2 gap-2 mt-4">
-                <button onclick="executeCleanScan()" class="btn-gold py-2.5 rounded-lg font-cinzel text-[11px] font-extrabold uppercase flex items-center justify-center gap-1.5 shadow-md">
-                    <i class="fa-solid fa-shield text-[10px]"></i>
-                    <span>Quick Scan</span>
-                </button>
-                <button onclick="injectThreatSimulation()" class="bg-rose-950/80 hover:bg-rose-900 border border-rose-600/50 text-rose-200 py-2.5 rounded-lg font-cinzel text-[11px] font-extrabold uppercase flex items-center justify-center gap-1.5 shadow-md transition active:scale-95">
-                    <i class="fa-solid fa-bug text-[10px]"></i>
-                    <span>Test Threat</span>
-                </button>
-            </div>
+    <!-- VIEW 2: SCAN -->
+    <div id="view-scan" class="tab-content">
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">DEEP CLOUD SCANNER</div>
+          <div class="panel-tag">MATRIX v3.0</div>
         </div>
-
-        <div class="glass-panel rounded-xl p-3 text-xs font-mono">
-            <div class="flex justify-between text-slate-400 mb-1 text-[10px]">
-                <span id="m-scan-status">STATUS: <b class="text-amber-300">READY</b></span>
-                <span id="m-scan-percent">0%</span>
-            </div>
-            <div class="w-full bg-slate-900 h-2 rounded overflow-hidden">
-                <div id="m-scan-bar" class="bg-gradient-to-r from-amber-500 to-emerald-400 h-full w-0 transition-all duration-300"></div>
-            </div>
-            <div id="m-scan-log" class="text-[9px] text-slate-500 mt-1.5 truncate">System idle. Ready to query cloud matrix.</div>
+        <div class="panel-desc">Perform full heuristic scanning and SHA-256 cloud verification.</div>
+        <div class="choose-row" style="margin-top: 10px;">
+          <button class="btn-choose" onclick="document.getElementById('fileChooser').click()" style="width: 100%; padding: 12px;">Trigger Deep Scan</button>
         </div>
+      </div>
     </div>
 
-    <div id="tab-quarantine" class="tab-content hidden space-y-3">
-        <div class="glass-panel rounded-xl p-3">
-            <div class="font-cinzel text-xs font-bold text-amber-300 mb-2 border-b border-amber-900/30 pb-2 flex justify-between items-center">
-                <span>ISOLATION VAULT</span>
-                <div class="flex items-center gap-2">
-                    <button onclick="purgeAllQuarantine()" id="btn-purge-all" class="hidden text-[9px] bg-rose-950/60 text-rose-300 hover:bg-rose-900 border border-rose-600/40 px-2 py-1 rounded transition">
-                        <i class="fa-solid fa-trash-can mr-1"></i> PURGE ALL
-                    </button>
-                    <span class="text-[9px] text-emerald-400 font-mono">AES-256</span>
-                </div>
-            </div>
-            <div id="quarantine-list" class="space-y-2 text-[11px]"></div>
+    <!-- VIEW 3: VAULT -->
+    <div id="view-vault" class="tab-content">
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">SECURE QUARANTINE VAULT</div>
+          <div class="panel-tag">0 THREATS</div>
         </div>
+        <div class="panel-desc">Isolated files and neutralized threat payloads.</div>
+        <div class="item-list">
+          <div class="list-entry">
+            <div class="list-entry-meta">
+              <span class="list-entry-title">Vault Clean</span>
+              <span class="list-entry-sub">No quarantined malicious items</span>
+            </div>
+            <span class="badge-tag badge-green">SAFE</span>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div id="tab-logs" class="tab-content hidden space-y-3">
-        <div class="glass-panel rounded-xl p-3">
-            <div class="font-cinzel text-xs font-bold text-amber-300 mb-2 border-b border-amber-900/30 pb-1.5 flex justify-between items-center">
-                <span>EVENT STREAM</span>
-                <span class="text-[9px] text-emerald-400 font-mono animate-pulse">LIVE</span>
-            </div>
-            <div id="event-logs" class="bg-black/80 rounded-lg p-2.5 space-y-2 font-mono text-[10px] text-slate-400 max-h-60 overflow-y-auto">
-                <div class="text-emerald-400">[INFO] App initialized. Ready.</div>
-            </div>
+    <!-- VIEW 4: LOGS -->
+    <div id="view-logs" class="tab-content">
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">SECURITY EVENT LOGS</div>
+          <div class="panel-tag">LIVE AUDIT</div>
         </div>
+        <div class="panel-desc">Real-time telemetry and API queries from Sydney Edge node.</div>
+        <div class="item-list" id="logsContainer">
+          <div class="list-entry">
+            <div class="list-entry-meta">
+              <span class="list-entry-title">Daemon Initialized</span>
+              <span class="list-entry-sub">SYD-EDGE-01 connected securely</span>
+            </div>
+            <span class="badge-tag badge-gold">SYSTEM</span>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <nav class="fixed bottom-0 left-0 right-0 h-16 bg-black/95 border-t border-amber-900/40 backdrop-blur-lg flex items-center justify-around px-2 z-50">
-        <button onclick="switchTab('dashboard')" id="bnav-dashboard" class="bottom-nav-item active flex flex-col items-center gap-1 text-slate-400 text-[10px] font-cinzel">
-            <i class="fa-solid fa-shield-halved text-base"></i>
-            <span>Shield</span>
-        </button>
-        <button onclick="switchTab('scanner')" id="bnav-scanner" class="bottom-nav-item flex flex-col items-center gap-1 text-slate-400 text-[10px] font-cinzel">
-            <i class="fa-solid fa-radar text-base"></i>
-            <span>Scan</span>
-        </button>
-        <button onclick="switchTab('quarantine')" id="bnav-quarantine" class="bottom-nav-item flex flex-col items-center gap-1 text-slate-400 text-[10px] font-cinzel">
-            <i class="fa-solid fa-box-archive text-base"></i>
-            <span>Vault</span>
-        </button>
-        <button onclick="switchTab('logs')" id="bnav-logs" class="bottom-nav-item flex flex-col items-center gap-1 text-slate-400 text-[10px] font-cinzel">
-            <i class="fa-solid fa-terminal text-base"></i>
-            <span>Logs</span>
-        </button>
-    </nav>
+  </div>
 
-    <script>
-        const API_URL = "https://shinsa-api.onrender.com";
-        
-        const SAMPLE_THREATS = [
-            { hash: "ed01ef2a32b102048d01fab8e71e66c9367d2acedf29414cb773e479a73f52fb", file: "taskhost_updater.exe" },
-            { hash: "d67f91106e2cf0656fb3dae46c7ff3c8a14de8b14c330f6a27e7fa694c34c899", file: "encryptor_lockbit.bin" },
-            { hash: "4f3bc85b2e04e76a6b1076b19a16f2c694a552bfef1855e96f183ec9d9e48a1d", file: "invoice_aug2026.pdf.exe" },
-            { hash: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", file: "crack_patcher.exe" }
-        ];
-        let threatSimIndex = 0;
-        let quarantinedItems = JSON.parse(localStorage.getItem('shinsa_vault') || '[]');
+  <nav class="bottom-bar">
+    <button class="nav-link active" onclick="switchTab('shield', this)">
+      <span class="nav-icon">🛡️</span>
+      <span>SHIELD</span>
+    </button>
+    <button class="nav-link" onclick="switchTab('scan', this)">
+      <span class="nav-icon">🔍</span>
+      <span>SCAN</span>
+    </button>
+    <button class="nav-link" onclick="switchTab('vault', this)">
+      <span class="nav-icon">🗄️</span>
+      <span>VAULT</span>
+    </button>
+    <button class="nav-link" onclick="switchTab('logs', this)">
+      <span class="nav-icon">💻</span>
+      <span>LOGS</span>
+    </button>
+  </nav>
 
-        function isIos() {
-            const userAgent = window.navigator.userAgent.toLowerCase();
-            return /iphone|ipad|ipod/.test(userAgent);
+  <script>
+    function switchTab(tabId, btn) {
+      var tabs = document.querySelectorAll('.tab-content');
+      for (var i = 0; i < tabs.length; i++) {
+        tabs[i].classList.remove('active-view');
+      }
+      var links = document.querySelectorAll('.nav-link');
+      for (var j = 0; j < links.length; j++) {
+        links[j].classList.remove('active');
+      }
+
+      var target = document.getElementById('view-' + tabId);
+      if (target) {
+        target.classList.add('active-view');
+      }
+      btn.classList.add('active');
+    }
+
+    async function computeSHA256(file) {
+      var buffer = await file.arrayBuffer();
+      var hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
+      var hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(function(b) {
+        return b.toString(16).padStart(2, '0');
+      }).join('');
+    }
+
+    async function inspectFile(event) {
+      var file = event.target.files[0];
+      if (!file) return;
+
+      document.getElementById('selectedFileName').innerText = file.name;
+      var res = document.getElementById('scanResult');
+      res.style.display = 'block';
+      res.style.color = '#dfbe6b';
+      res.innerText = 'Calculating Hash & Querying Matrix...';
+
+      try {
+        var fileHash = await computeSHA256(file);
+        var response = await fetch('https://shinsa.com.au/api/v1/scan-hash', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            hash: fileHash,
+            file_name: file.name
+          })
+        });
+
+        var data = await response.json();
+        if (data.is_malicious) {
+          res.style.color = '#ef4444';
+          res.innerText = 'Threat Detected: ' + (data.threat_name || 'Generic.Malware');
+        } else {
+          res.style.color = '#10b981';
+          res.innerText = 'Clean Signature: System Protected';
         }
-
-        function isInStandaloneMode() {
-            return ('standalone' in window.navigator) && (window.navigator.standalone);
-        }
-
-        function checkInstallPrompt() {
-            if (isIos() && !isInStandaloneMode()) {
-                const dismissed = sessionStorage.getItem('pwa_prompt_dismissed');
-                if (!dismissed) {
-                    document.getElementById('pwa-install-prompt').classList.remove('hidden');
-                }
-            }
-        }
-
-        function closeInstallPrompt() {
-            document.getElementById('pwa-install-prompt').classList.add('hidden');
-            sessionStorage.setItem('pwa_prompt_dismissed', 'true');
-        }
-
-        async function fetchServerStatus() {
-            try {
-                const res = await fetch(API_URL + "/");
-                const data = await res.json();
-                
-                document.getElementById('cloud-status-text').innerText = "ONLINE";
-                document.getElementById('cloud-badge').className = "flex items-center gap-1.5 text-emerald-400 bg-emerald-950/40 px-2.5 py-1 rounded-full border border-emerald-500/30 text-[10px] font-cinzel font-bold";
-                document.getElementById('cloud-dot').className = "w-2 h-2 rounded-full bg-emerald-400 animate-pulse";
-                document.getElementById('cloud-node-info').innerText = "NODE: " + data.node + " | " + data.engine_version;
-                document.getElementById('sig-count').innerText = data.active_signatures_indexed + " Signatures";
-
-                addLog("[CLOUD] Connected to " + data.node);
-            } catch (err) {
-                document.getElementById('cloud-status-text').innerText = "OFFLINE";
-                addLog("[ERROR] Failed to reach cloud API.");
-            }
-        }
-
-        function saveVault() {
-            localStorage.setItem('shinsa_vault', JSON.stringify(quarantinedItems));
-            document.getElementById('threats-blocked-count').innerText = quarantinedItems.length + " In Vault";
-            renderQuarantineList();
-        }
-
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
-            const target = document.getElementById('tab-' + tabId);
-            if (target) target.classList.remove('hidden');
-
-            document.querySelectorAll('.bottom-nav-item').forEach(btn => btn.classList.remove('active'));
-            const activeBtn = document.getElementById('bnav-' + tabId);
-            if (activeBtn) activeBtn.classList.add('active');
-        }
-
-        function addLog(msg) {
-            const logs = document.getElementById('event-logs');
-            const entry = document.createElement('div');
-            entry.innerText = msg;
-            logs.appendChild(entry);
-            logs.scrollTop = logs.scrollHeight;
-        }
-
-        function renderQuarantineList() {
-            const qList = document.getElementById('quarantine-list');
-            const purgeBtn = document.getElementById('btn-purge-all');
-            
-            if (quarantinedItems.length === 0) {
-                purgeBtn.classList.add('hidden');
-                qList.innerHTML = `
-                    <div class="text-center text-slate-500 py-6 text-[10px]">
-                        <i class="fa-solid fa-shield-cat text-2xl mb-1 text-slate-600"></i>
-                        <div>No infected items currently quarantined.</div>
-                    </div>
-                `;
-                return;
-            }
-
-            purgeBtn.classList.remove('hidden');
-            qList.innerHTML = '';
-            quarantinedItems.forEach((item, index) => {
-                const row = document.createElement('div');
-                row.className = "p-3 bg-black/70 border border-rose-900/40 rounded-lg flex flex-col gap-2";
-                row.innerHTML = `
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <div class="text-rose-400 font-bold text-xs flex items-center gap-1.5">
-                                <i class="fa-solid fa-virus text-rose-500"></i>
-                                <span>${item.name}</span>
-                            </div>
-                            <div class="text-[9px] text-slate-400 font-mono mt-0.5">${item.file}</div>
-                            <div class="text-[8px] text-slate-600 font-mono">${item.hash.substring(0, 26)}...</div>
-                        </div>
-                        <span class="text-[9px] text-rose-400 bg-rose-950/40 px-2 py-0.5 rounded border border-rose-500/30">QUARANTINED</span>
-                    </div>
-                    <div class="flex items-center justify-end gap-2 pt-1 border-t border-slate-800/60">
-                        <button onclick="deleteThreat(${index})" class="text-[9px] bg-rose-950/80 hover:bg-rose-900 text-rose-200 px-2.5 py-1 rounded border border-rose-700/50 flex items-center gap-1">
-                            <i class="fa-solid fa-trash-can text-[8px]"></i> Delete
-                        </button>
-                        <button onclick="restoreThreat(${index})" class="text-[9px] bg-slate-900 hover:bg-slate-800 text-slate-300 px-2.5 py-1 rounded border border-slate-700 flex items-center gap-1">
-                            <i class="fa-solid fa-rotate-left text-[8px]"></i> Restore
-                        </button>
-                    </div>
-                `;
-                qList.appendChild(row);
-            });
-        }
-
-        function deleteThreat(index) {
-            const threat = quarantinedItems[index];
-            quarantinedItems.splice(index, 1);
-            saveVault();
-            addLog("[VAULT] Threat permanently destroyed: " + threat.name);
-        }
-
-        function restoreThreat(index) {
-            const threat = quarantinedItems[index];
-            quarantinedItems.splice(index, 1);
-            saveVault();
-            addLog("[VAULT] File restored from quarantine: " + threat.name);
-        }
-
-        function purgeAllQuarantine() {
-            if (confirm("Are you sure you want to permanently shred all quarantined threats?")) {
-                quarantinedItems = [];
-                saveVault();
-                addLog("[VAULT] All quarantined objects wiped.");
-            }
-        }
-
-        async function sha256Browser(file) {
-            const buffer = await file.arrayBuffer();
-            const digest = await crypto.subtle.digest("SHA-256", buffer);
-            return Array.from(new Uint8Array(digest)).map(b => b.toString(16).padStart(2, '0')).join('');
-        }
-
-        async function handleManualFileUpload(input) {
-            if (!input.files || !input.files[0]) return;
-            const file = input.files[0];
-            addLog("[INSPECT] Analyzing: " + file.name + "...");
-
-            try {
-                const hash = await sha256Browser(file);
-                const res = await fetch(API_URL + "/api/v1/threats/lookup", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ file_hash: hash, file_name: file.name, file_size_bytes: file.size })
-                });
-                const verdict = await res.json();
-
-                if (verdict.verdict === "MALICIOUS") {
-                    quarantinedItems.push({ name: verdict.threat_name, file: file.name, hash: hash });
-                    saveVault();
-                    alert("⚠️ THREAT DETECTED!\n" + verdict.threat_name + " was isolated into Vault.");
-                } else {
-                    alert("✅ FILE CLEAN!\nNo malicious signatures found for " + file.name);
-                }
-            } catch (err) {
-                alert("Error scanning file.");
-            }
-            input.value = "";
-        }
-
-        async function executeCleanScan() {
-            const status = document.getElementById('m-scan-status');
-            const percent = document.getElementById('m-scan-percent');
-            const bar = document.getElementById('m-scan-bar');
-            const log = document.getElementById('m-scan-log');
-
-            status.innerHTML = "STATUS: <b class='text-amber-300'>SCANNING...</b>";
-            bar.style.width = "40%";
-            percent.innerText = "40%";
-            log.innerText = "Checking memory processes...";
-
-            await new Promise(r => setTimeout(r, 600));
-            bar.style.width = "100%";
-            percent.innerText = "100%";
-            status.innerHTML = "STATUS: <b class='text-emerald-400'>ALL FILES CLEAN</b>";
-            log.innerText = "System is secure. 0 threats detected.";
-            addLog("[SCAN] Quick scan finished. Clean.");
-        }
-
-        async function injectThreatSimulation() {
-            const target = SAMPLE_THREATS[threatSimIndex % SAMPLE_THREATS.length];
-            threatSimIndex++;
-
-            const status = document.getElementById('m-scan-status');
-            const percent = document.getElementById('m-scan-percent');
-            const bar = document.getElementById('m-scan-bar');
-            const log = document.getElementById('m-scan-log');
-
-            status.innerHTML = "STATUS: <b class='text-amber-300'>ANALYZING...</b>";
-            bar.style.width = "60%";
-            percent.innerText = "60%";
-
-            try {
-                const res = await fetch(API_URL + "/api/v1/threats/lookup", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ file_hash: target.hash, file_name: target.file })
-                });
-                const verdict = await res.json();
-
-                bar.style.width = "100%";
-                percent.innerText = "100%";
-
-                if (verdict.verdict === "MALICIOUS") {
-                    quarantinedItems.push({ name: verdict.threat_name, file: target.file, hash: target.hash });
-                    saveVault();
-
-                    status.innerHTML = "STATUS: <b class='text-rose-500'>THREAT INTERCEPTED!</b>";
-                    log.innerText = "Isolated: " + verdict.threat_name;
-                    addLog("[ALERT] Intercepted: " + verdict.threat_name);
-                }
-            } catch (e) {
-                status.innerHTML = "STATUS: <b class='text-rose-400'>API ERROR</b>";
-            }
-        }
-
-        fetchServerStatus();
-        saveVault();
-        window.addEventListener('load', checkInstallPrompt);
-    </script>
+      } catch (e) {
+        res.style.color = '#ef4444';
+        res.innerText = 'Cloud Matrix Connection Error';
+      }
+    }
+  </script>
 </body>
 </html>
