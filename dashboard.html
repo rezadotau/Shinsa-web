@@ -2,8 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>SHINSA Mobile Security</title>
+    
+    <!-- iOS & PWA App Meta Tags -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="SHINSA">
+    <link rel="apple-touch-icon" href="https://img.icons8.com/color/512/shield.png">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -13,7 +21,8 @@
             background-color: #050608;
             user-select: none;
             color: #cbd5e1;
-            padding-bottom: 75px;
+            padding-top: env(safe-area-inset-top, 12px);
+            padding-bottom: calc(75px + env(safe-area-inset-bottom, 0px));
         }
         .font-cinzel { font-family: 'Cinzel', serif; }
         .gold-text {
@@ -105,6 +114,16 @@
             </div>
         </div>
 
+        <!-- Manual Custom File Inspection -->
+        <div class="glass-panel rounded-xl p-3">
+            <div class="font-cinzel text-[11px] font-bold text-amber-300 mb-1.5 flex items-center justify-between">
+                <span>FILE INTEGRITY CHECK</span>
+                <span class="text-[8px] text-amber-400 font-mono">ON-DEMAND</span>
+            </div>
+            <p class="text-[10px] text-slate-400 mb-2">Upload any document, archive, or script to run a real-time SHA-256 cloud check.</p>
+            <input type="file" id="file-uploader" onchange="handleManualFileUpload(this)" class="text-[10px] text-slate-400 file:mr-2 file:py-1 file:px-2.5 file:rounded-md file:border-0 file:text-[10px] file:font-semibold file:bg-amber-500/20 file:text-amber-300 hover:file:bg-amber-500/30 cursor-pointer w-full"/>
+        </div>
+
         <div class="glass-panel rounded-xl p-3">
             <div class="font-cinzel text-[11px] font-bold text-amber-300 mb-2 border-b border-amber-900/30 pb-1">
                 ACTIVE DEFENSE SUITE
@@ -183,9 +202,7 @@
                     <span class="text-[9px] text-emerald-400 font-mono">AES-256</span>
                 </div>
             </div>
-            <div id="quarantine-list" class="space-y-2 text-[11px]">
-                <!-- Injected via JS -->
-            </div>
+            <div id="quarantine-list" class="space-y-2 text-[11px]"></div>
         </div>
     </div>
 
@@ -225,7 +242,6 @@
     <script>
         const API_URL = "https://shinsa-api.onrender.com";
         
-        // Sample Threat Pool for realistic simulations
         const SAMPLE_THREATS = [
             { hash: "ed01ef2a32b102048d01fab8e71e66c9367d2acedf29414cb773e479a73f52fb", file: "taskhost_updater.exe" },
             { hash: "d67f91106e2cf0656fb3dae46c7ff3c8a14de8b14c330f6a27e7fa694c34c899", file: "encryptor_lockbit.bin" },
@@ -233,8 +249,6 @@
             { hash: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", file: "crack_patcher.exe" }
         ];
         let threatSimIndex = 0;
-
-        // Load quarantined from local storage or empty
         let quarantinedItems = JSON.parse(localStorage.getItem('shinsa_vault') || '[]');
 
         async function fetchServerStatus() {
@@ -346,7 +360,41 @@
             }
         }
 
-        // 1. Regular Clean Scan (Nothing malicious found)
+        async function sha256Browser(file) {
+            const buffer = await file.arrayBuffer();
+            const digest = await crypto.subtle.digest("SHA-256", buffer);
+            return Array.from(new Uint8Array(digest)).map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        async function handleManualFileUpload(input) {
+            if (!input.files || !input.files[0]) return;
+            const file = input.files[0];
+            addLog("[INSPECT] Analyzing file: " + file.name + " (" + file.size + " bytes)...");
+
+            try {
+                const hash = await sha256Browser(file);
+                addLog("[SHA-256] Computed: " + hash.substring(0, 20) + "...");
+
+                const res = await fetch(API_URL + "/api/v1/threats/lookup", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ file_hash: hash, file_name: file.name, file_size_bytes: file.size })
+                });
+                const verdict = await res.json();
+
+                if (verdict.verdict === "MALICIOUS") {
+                    quarantinedItems.push({ name: verdict.threat_name, file: file.name, hash: hash });
+                    saveVault();
+                    alert("⚠️ THREAT DETECTED!\n" + verdict.threat_name + " was isolated into Vault.");
+                } else {
+                    alert("✅ FILE CLEAN!\nNo malicious signatures found for " + file.name);
+                }
+            } catch (err) {
+                alert("Error scanning file via Cloud API.");
+            }
+            input.value = "";
+        }
+
         async function executeCleanScan() {
             const status = document.getElementById('m-scan-status');
             const percent = document.getElementById('m-scan-percent');
@@ -354,8 +402,8 @@
             const log = document.getElementById('m-scan-log');
 
             status.innerHTML = "STATUS: <b class='text-amber-300'>SCANNING SYSTEM...</b>";
-            bar.style.width = "20%";
-            percent.innerText = "20%";
+            bar.style.width = "25%";
+            percent.innerText = "25%";
             log.innerText = "Checking active memory processes...";
 
             await new Promise(r => setTimeout(r, 600));
@@ -369,7 +417,7 @@
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ file_hash: "a".repeat(64), file_name: "explorer.exe" })
                 });
-                const verdict = await res.json();
+                await res.json();
 
                 bar.style.width = "100%";
                 percent.innerText = "100%";
@@ -381,7 +429,6 @@
             }
         }
 
-        // 2. Simulated Threat Injection Test
         async function injectThreatSimulation() {
             const target = SAMPLE_THREATS[threatSimIndex % SAMPLE_THREATS.length];
             threatSimIndex++;
@@ -420,7 +467,6 @@
             }
         }
 
-        // Initial setup
         fetchServerStatus();
         saveVault();
     </script>
