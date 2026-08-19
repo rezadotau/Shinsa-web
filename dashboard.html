@@ -100,7 +100,7 @@
                 <div class="h-3 w-[1px] bg-amber-900/50"></div>
                 <div>
                     <span class="text-slate-400">Threats:</span>
-                    <b id="threats-blocked-count" class="text-emerald-400 ml-1">0 Blocked</b>
+                    <b id="threats-blocked-count" class="text-emerald-400 ml-1">0 In Vault</b>
                 </div>
             </div>
         </div>
@@ -148,13 +148,13 @@
             </div>
 
             <div class="grid grid-cols-2 gap-2 mt-4">
-                <button onclick="executeLiveCloudScan('Clean System Files')" class="btn-gold py-2.5 rounded-lg font-cinzel text-[11px] font-extrabold uppercase flex items-center justify-center gap-1.5 shadow-md">
-                    <i class="fa-solid fa-bolt text-[10px]"></i>
-                    <span>Quick Scan</span>
+                <button onclick="executeCleanScan()" class="btn-gold py-2.5 rounded-lg font-cinzel text-[11px] font-extrabold uppercase flex items-center justify-center gap-1.5 shadow-md">
+                    <i class="fa-solid fa-shield text-[10px]"></i>
+                    <span>Quick Scan (Clean)</span>
                 </button>
-                <button onclick="executeLiveCloudScan('Simulated Threat Test')" class="btn-gold py-2.5 rounded-lg font-cinzel text-[11px] font-extrabold uppercase flex items-center justify-center gap-1.5 shadow-md">
+                <button onclick="injectThreatSimulation()" class="bg-rose-950/80 hover:bg-rose-900 border border-rose-600/50 text-rose-200 py-2.5 rounded-lg font-cinzel text-[11px] font-extrabold uppercase flex items-center justify-center gap-1.5 shadow-md transition active:scale-95">
                     <i class="fa-solid fa-bug text-[10px]"></i>
-                    <span>Test Threat</span>
+                    <span>Simulate Threat</span>
                 </button>
             </div>
         </div>
@@ -165,9 +165,9 @@
                 <span id="m-scan-percent">0%</span>
             </div>
             <div class="w-full bg-slate-900 h-2 rounded overflow-hidden">
-                <div id="m-scan-bar" class="bg-gradient-to-r from-amber-500 to-emerald-400 h-full w-0 transition-all duration-200"></div>
+                <div id="m-scan-bar" class="bg-gradient-to-r from-amber-500 to-emerald-400 h-full w-0 transition-all duration-300"></div>
             </div>
-            <div id="m-scan-log" class="text-[9px] text-slate-500 mt-1.5 truncate">Ready to query cloud matrix.</div>
+            <div id="m-scan-log" class="text-[9px] text-slate-500 mt-1.5 truncate">System idle. Ready to query cloud matrix.</div>
         </div>
     </div>
 
@@ -184,10 +184,7 @@
                 </div>
             </div>
             <div id="quarantine-list" class="space-y-2 text-[11px]">
-                <div class="text-center text-slate-500 py-6 text-[10px]">
-                    <i class="fa-solid fa-shield-cat text-2xl mb-1 text-slate-600"></i>
-                    <div>No infected items currently quarantined.</div>
-                </div>
+                <!-- Injected via JS -->
             </div>
         </div>
     </div>
@@ -227,7 +224,18 @@
 
     <script>
         const API_URL = "https://shinsa-api.onrender.com";
-        let quarantinedItems = [];
+        
+        // Sample Threat Pool for realistic simulations
+        const SAMPLE_THREATS = [
+            { hash: "ed01ef2a32b102048d01fab8e71e66c9367d2acedf29414cb773e479a73f52fb", file: "taskhost_updater.exe" },
+            { hash: "d67f91106e2cf0656fb3dae46c7ff3c8a14de8b14c330f6a27e7fa694c34c899", file: "encryptor_lockbit.bin" },
+            { hash: "4f3bc85b2e04e76a6b1076b19a16f2c694a552bfef1855e96f183ec9d9e48a1d", file: "invoice_aug2026.pdf.exe" },
+            { hash: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", file: "crack_patcher.exe" }
+        ];
+        let threatSimIndex = 0;
+
+        // Load quarantined from local storage or empty
+        let quarantinedItems = JSON.parse(localStorage.getItem('shinsa_vault') || '[]');
 
         async function fetchServerStatus() {
             try {
@@ -238,13 +246,19 @@
                 document.getElementById('cloud-badge').className = "flex items-center gap-1.5 text-emerald-400 bg-emerald-950/40 px-2.5 py-1 rounded-full border border-emerald-500/30 text-[10px] font-cinzel font-bold";
                 document.getElementById('cloud-dot').className = "w-2 h-2 rounded-full bg-emerald-400 animate-pulse";
                 document.getElementById('cloud-node-info').innerText = "NODE: " + data.node + " | " + data.engine_version;
-                document.getElementById('sig-count').innerText = data.active_signatures_indexed + " Indexed";
+                document.getElementById('sig-count').innerText = data.active_signatures_indexed + " Signatures";
 
-                addLog("[CLOUD] Connected to " + data.node + " successfully.");
+                addLog("[CLOUD] Connected to " + data.node + " (Sydney Gateway).");
             } catch (err) {
                 document.getElementById('cloud-status-text').innerText = "OFFLINE";
                 addLog("[ERROR] Failed to reach cloud API.");
             }
+        }
+
+        function saveVault() {
+            localStorage.setItem('shinsa_vault', JSON.stringify(quarantinedItems));
+            document.getElementById('threats-blocked-count').innerText = quarantinedItems.length + " In Vault";
+            renderQuarantineList();
         }
 
         function switchTab(tabId) {
@@ -292,7 +306,8 @@
                                 <i class="fa-solid fa-virus text-rose-500"></i>
                                 <span>${item.name}</span>
                             </div>
-                            <div class="text-[9px] text-slate-500 font-mono mt-0.5">${item.hash.substring(0, 26)}...</div>
+                            <div class="text-[9px] text-slate-400 font-mono mt-0.5">${item.file}</div>
+                            <div class="text-[8px] text-slate-600 font-mono">${item.hash.substring(0, 26)}...</div>
                         </div>
                         <span class="text-[9px] text-rose-400 bg-rose-950/40 px-2 py-0.5 rounded border border-rose-500/30">QUARANTINED</span>
                     </div>
@@ -312,70 +327,102 @@
         function deleteThreat(index) {
             const threat = quarantinedItems[index];
             quarantinedItems.splice(index, 1);
-            renderQuarantineList();
+            saveVault();
             addLog("[VAULT] Threat permanently destroyed: " + threat.name);
         }
 
         function restoreThreat(index) {
             const threat = quarantinedItems[index];
             quarantinedItems.splice(index, 1);
-            renderQuarantineList();
+            saveVault();
             addLog("[VAULT] File restored from quarantine: " + threat.name);
         }
 
         function purgeAllQuarantine() {
             if (confirm("Are you sure you want to permanently shred all quarantined threats?")) {
                 quarantinedItems = [];
-                renderQuarantineList();
+                saveVault();
                 addLog("[VAULT] All quarantined objects securely shredded with AES-256 wipe.");
             }
         }
 
-        async function executeLiveCloudScan(mode) {
+        // 1. Regular Clean Scan (Nothing malicious found)
+        async function executeCleanScan() {
             const status = document.getElementById('m-scan-status');
             const percent = document.getElementById('m-scan-percent');
             const bar = document.getElementById('m-scan-bar');
             const log = document.getElementById('m-scan-log');
 
-            status.innerHTML = "STATUS: <b class='text-amber-300'>QUERYING CLOUD...</b>";
-            bar.style.width = "40%";
-            percent.innerText = "40%";
+            status.innerHTML = "STATUS: <b class='text-amber-300'>SCANNING SYSTEM...</b>";
+            bar.style.width = "20%";
+            percent.innerText = "20%";
+            log.innerText = "Checking active memory processes...";
 
-            const testHash = mode.includes("Threat") 
-                ? "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
-                : "1111111111111111111111111111111111111111111111111111111111111111";
+            await new Promise(r => setTimeout(r, 600));
+            bar.style.width = "65%";
+            percent.innerText = "65%";
+            log.innerText = "Querying SHINSA Cloud Intelligence...";
 
             try {
                 const res = await fetch(API_URL + "/api/v1/threats/lookup", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ file_hash: testHash, file_name: "sample_payload.exe" })
+                    body: JSON.stringify({ file_hash: "a".repeat(64), file_name: "explorer.exe" })
                 });
                 const verdict = await res.json();
-                
+
+                bar.style.width = "100%";
+                percent.innerText = "100%";
+                status.innerHTML = "STATUS: <b class='text-emerald-400'>ALL FILES CLEAN</b>";
+                log.innerText = "System is fully secure. 0 threats detected.";
+                addLog("[SCAN] Quick Scan complete. System clean.");
+            } catch (e) {
+                status.innerHTML = "STATUS: <b class='text-rose-400'>SCAN ERROR</b>";
+            }
+        }
+
+        // 2. Simulated Threat Injection Test
+        async function injectThreatSimulation() {
+            const target = SAMPLE_THREATS[threatSimIndex % SAMPLE_THREATS.length];
+            threatSimIndex++;
+
+            const status = document.getElementById('m-scan-status');
+            const percent = document.getElementById('m-scan-percent');
+            const bar = document.getElementById('m-scan-bar');
+            const log = document.getElementById('m-scan-log');
+
+            status.innerHTML = "STATUS: <b class='text-amber-300'>ANALYZING PAYLOAD...</b>";
+            bar.style.width = "50%";
+            percent.innerText = "50%";
+            log.innerText = "Checking " + target.file + "...";
+
+            try {
+                const res = await fetch(API_URL + "/api/v1/threats/lookup", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ file_hash: target.hash, file_name: target.file })
+                });
+                const verdict = await res.json();
+
                 bar.style.width = "100%";
                 percent.innerText = "100%";
 
                 if (verdict.verdict === "MALICIOUS") {
-                    quarantinedItems.push({ name: verdict.threat_name, hash: testHash });
-                    renderQuarantineList();
-                    
-                    document.getElementById('threats-blocked-count').innerText = quarantinedItems.length + " Blocked";
+                    quarantinedItems.push({ name: verdict.threat_name, file: target.file, hash: target.hash });
+                    saveVault();
+
                     status.innerHTML = "STATUS: <b class='text-rose-500'>THREAT INTERCEPTED!</b>";
-                    log.innerText = "Intercepted: " + verdict.threat_name + " [" + verdict.action + "]";
-                    addLog("[ALERT] Intercepted: " + verdict.threat_name + " (Action: " + verdict.action + ")");
-                } else {
-                    status.innerHTML = "STATUS: <b class='text-emerald-400'>CLEAN</b>";
-                    log.innerText = "File verified safe by Cloud Threat Intelligence.";
-                    addLog("[SCAN] SHA256 verified safe: " + testHash.substring(0, 16) + "...");
+                    log.innerText = "Isolated: " + verdict.threat_name;
+                    addLog("[ALERT] Intercepted: " + verdict.threat_name + " in " + target.file);
                 }
             } catch (e) {
                 status.innerHTML = "STATUS: <b class='text-rose-400'>API ERROR</b>";
-                addLog("[ERROR] Failed to query cloud gateway.");
             }
         }
 
+        // Initial setup
         fetchServerStatus();
+        saveVault();
     </script>
 </body>
 </html>
