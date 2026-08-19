@@ -9,7 +9,6 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="SHINSA">
-    <link rel="apple-touch-icon" href="image.png.jpeg">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
@@ -21,7 +20,7 @@
             user-select: none;
             color: #cbd5e1;
             padding-top: env(safe-area-inset-top, 12px);
-            padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+            padding-bottom: calc(85px + env(safe-area-inset-bottom, 0px));
         }
         .font-cinzel { font-family: 'Cinzel', serif; }
         .gold-text {
@@ -78,9 +77,11 @@
     <div id="pwa-install-prompt" class="hidden fixed bottom-20 left-3 right-3 z-50 glass-panel p-4 rounded-2xl border border-amber-400/60 shadow-[0_0_30px_rgba(212,175,55,0.25)] animate-slide-up">
         <div class="flex items-center justify-between mb-2.5">
             <div class="flex items-center gap-2.5">
-                <img src="image.png.jpeg" onerror="this.src='https://img.icons8.com/color/512/shield.png'" alt="SHINSA" class="w-10 h-10 rounded-xl border border-amber-400/60 shadow object-cover">
+                <div class="w-10 h-10 rounded-xl border border-amber-400/60 bg-black flex items-center justify-center shadow">
+                    <i class="fa-solid fa-shield-halved text-amber-400 text-lg"></i>
+                </div>
                 <div>
-                    <div class="font-cinzel text-xs font-bold gold-text">Install SHINSA WebApp</div>
+                    <div class="font-cinzel text-xs font-bold gold-text">Install SHINSA App</div>
                     <div class="text-[9px] text-slate-400">Add to Home Screen for fast standalone access</div>
                 </div>
             </div>
@@ -91,21 +92,35 @@
         <div class="bg-black/70 rounded-xl p-2.5 text-[10px] text-slate-300 space-y-1.5 border border-amber-900/30">
             <div class="flex items-center gap-2">
                 <i class="fa-solid fa-arrow-up-from-square text-amber-400"></i>
-                <span>1. Tap the <b class="text-white">Share</b> icon in Safari navigation bar.</span>
+                <span>1. Tap the <b class="text-white">Share</b> button in Safari bar.</span>
             </div>
             <div class="flex items-center gap-2">
                 <i class="fa-solid fa-plus-square text-amber-400"></i>
-                <span>2. Select <b class="text-white">Add to Home Screen</b> to install.</span>
+                <span>2. Select <b class="text-white">Add to Home Screen</b>.</span>
             </div>
         </div>
     </div>
 
     <div id="tab-dashboard" class="tab-content space-y-3">
         <div class="glass-panel rounded-xl p-4 text-center">
-            <img src="image.png.jpeg" onerror="this.src='https://img.icons8.com/color/512/shield.png'" alt="SHINSA Logo" class="w-20 h-20 mx-auto mb-2 rounded-2xl border-2 border-amber-400/60 shadow-[0_0_20px_rgba(212,175,55,0.3)] object-cover">
+            
+            <div class="w-24 h-24 mx-auto mb-2 flex items-center justify-center relative">
+                <div class="absolute inset-0 rounded-2xl bg-amber-500/10 border border-amber-400/30 shadow-[0_0_25px_rgba(212,175,55,0.25)] flex items-center justify-center">
+                    <svg class="w-20 h-16 text-amber-400" viewBox="0 0 400 120" fill="currentColor">
+                        <circle cx="200" cy="60" r="20" fill="#d4af37" stroke="#fce09b" stroke-width="2"/>
+                        <circle cx="200" cy="60" r="12" fill="#1b1610"/>
+                        <path d="M200 48 L203 57 L212 60 L203 63 L200 72 L197 63 L188 60 L197 57 Z" fill="#fce09b"/>
+                        <path d="M175 55 C140 48, 80 38, 10 48 C50 58, 110 65, 175 65 Z" fill="#d4af37"/>
+                        <path d="M175 65 C130 76, 90 78, 45 90 C90 90, 135 86, 175 79 Z" fill="#b38a20"/>
+                        <path d="M225 55 C260 48, 320 38, 390 48 C350 58, 290 65, 225 65 Z" fill="#d4af37"/>
+                        <path d="M225 65 C270 76, 310 78, 355 90 C310 90, 265 86, 225 79 Z" fill="#b38a20"/>
+                    </svg>
+                </div>
+            </div>
+
             <div class="text-[10px] tracking-[0.25em] font-cinzel text-amber-300 uppercase font-semibold">THE FORTRESS OF SHINSA</div>
             
-            <div class="font-cinzel text-sm font-extrabold tracking-widest text-emerald-400 mt-2.5">
+            <div class="font-cinzel text-sm font-extrabold tracking-widest text-emerald-400 mt-2">
                 SYSTEM IS PROTECTED
             </div>
             <div id="cloud-node-info" class="text-[10px] text-amber-200/60 font-cinzel mt-0.5">CONNECTING TO SYDNEY NODE...</div>
