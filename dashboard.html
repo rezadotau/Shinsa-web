@@ -100,7 +100,7 @@
                 <div class="h-3 w-[1px] bg-amber-900/50"></div>
                 <div>
                     <span class="text-slate-400">Threats:</span>
-                    <b class="text-emerald-400 ml-1">0 Blocked</b>
+                    <b id="threats-blocked-count" class="text-emerald-400 ml-1">0 Blocked</b>
                 </div>
             </div>
         </div>
@@ -167,7 +167,7 @@
             <div class="w-full bg-slate-900 h-2 rounded overflow-hidden">
                 <div id="m-scan-bar" class="bg-gradient-to-r from-amber-500 to-emerald-400 h-full w-0 transition-all duration-200"></div>
             </div>
-            <div id="m-scan-log" class="text-[9px] text-slate-500 mt-1.5 truncate">Connect to cloud to scan endpoints.</div>
+            <div id="m-scan-log" class="text-[9px] text-slate-500 mt-1.5 truncate">Ready to query cloud matrix.</div>
         </div>
     </div>
 
@@ -219,6 +219,7 @@
 
     <script>
         const API_URL = "https://shinsa-api.onrender.com";
+        let blockedCount = 0;
 
         async function fetchServerStatus() {
             try {
@@ -266,7 +267,6 @@
             bar.style.width = "40%";
             percent.innerText = "40%";
 
-            // Select Hash for test
             const testHash = mode.includes("Threat") 
                 ? "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
                 : "1111111111111111111111111111111111111111111111111111111111111111";
@@ -275,7 +275,7 @@
                 const res = await fetch(API_URL + "/api/v1/threats/lookup", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ file_hash: testHash, file_name: "test_sample.bin" })
+                    body: JSON.stringify({ file_hash: testHash, file_name: "sample_payload.exe" })
                 });
                 const verdict = await res.json();
                 
@@ -283,30 +283,36 @@
                 percent.innerText = "100%";
 
                 if (verdict.verdict === "MALICIOUS") {
+                    blockedCount++;
+                    document.getElementById('threats-blocked-count').innerText = blockedCount + " Blocked";
                     status.innerHTML = "STATUS: <b class='text-rose-500'>THREAT INTERCEPTED!</b>";
-                    log.innerText = "Detected: " + verdict.threat_name + " [" + verdict.action + "]";
-                    addLog("[ALERT] Intercepted: " + verdict.threat_name);
+                    log.innerText = "Intercepted: " + verdict.threat_name + " [" + verdict.action + "]";
+                    addLog("[ALERT] Intercepted: " + verdict.threat_name + " (Action: " + verdict.action + ")");
                     
-                    document.getElementById('quarantine-list').innerHTML = `
-                        <div class="p-2.5 bg-black/60 border border-rose-900/40 rounded-lg flex items-center justify-between">
-                            <div>
-                                <div class="text-rose-400 font-bold">${verdict.threat_name}</div>
-                                <div class="text-[9px] text-slate-500">${testHash.substring(0, 24)}...</div>
-                            </div>
-                            <span class="text-[9px] text-rose-400 bg-rose-950/40 px-2 py-0.5 rounded border border-rose-500/30">QUARANTINED</span>
+                    const qList = document.getElementById('quarantine-list');
+                    if (blockedCount === 1) qList.innerHTML = '';
+                    
+                    const item = document.createElement('div');
+                    item.className = "p-2.5 bg-black/60 border border-rose-900/40 rounded-lg flex items-center justify-between";
+                    item.innerHTML = `
+                        <div>
+                            <div class="text-rose-400 font-bold text-xs">${verdict.threat_name}</div>
+                            <div class="text-[9px] text-slate-500">${testHash.substring(0, 24)}...</div>
                         </div>
+                        <span class="text-[9px] text-rose-400 bg-rose-950/40 px-2 py-0.5 rounded border border-rose-500/30">QUARANTINED</span>
                     `;
+                    qList.appendChild(item);
                 } else {
                     status.innerHTML = "STATUS: <b class='text-emerald-400'>CLEAN</b>";
                     log.innerText = "File verified safe by Cloud Threat Intelligence.";
-                    addLog("[SCAN] SHA256 verified clean by cloud.");
+                    addLog("[SCAN] SHA256 verified safe: " + testHash.substring(0, 16) + "...");
                 }
             } catch (e) {
-                status.innerHTML = "STATUS: <b class='text-rose-400'>ERROR</b>";
+                status.innerHTML = "STATUS: <b class='text-rose-400'>API ERROR</b>";
+                addLog("[ERROR] Failed to query cloud gateway.");
             }
         }
 
-        // Initialize on load
         fetchServerStatus();
     </script>
 </body>
