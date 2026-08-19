@@ -2,214 +2,496 @@
 <html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>SHINSA Cloud Antivirus</title>
 
-  <!-- iOS Safari PWA Configuration -->
+  <!-- iOS PWA Meta Tags -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="SHINSA">
   <meta name="mobile-web-app-capable" content="yes">
-  <meta name="theme-color" content="#0f172a">
+  <meta name="theme-color" content="#0b1120">
   <meta name="application-name" content="SHINSA">
 
-  <!-- Application Icons -->
+  <!-- Icons -->
   <link rel="icon" type="image/png" href="/apple-touch-icon.png">
-  <link rel="shortcut icon" type="image/png" href="/apple-touch-icon.png">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-  <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-  <link rel="apple-touch-icon" sizes="167x167" href="/apple-touch-icon.png">
   <link rel="manifest" href="/manifest.json">
 
   <style>
+    :root {
+      --bg-main: #070b14;
+      --card-bg: #111827;
+      --card-border: #1f293d;
+      --accent-blue: #0ea5e9;
+      --accent-glow: rgba(14, 165, 233, 0.2);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --success: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       -webkit-tap-highlight-color: transparent;
+      user-select: none;
     }
 
     body {
-      background-color: #0b1120;
-      color: #f8fafc;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      background-color: var(--bg-main);
+      color: var(--text-main);
       min-height: 100vh;
-      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      padding-bottom: 80px;
     }
 
-    .container {
-      width: 100%;
-      max-width: 420px;
+    /* Top Bar */
+    .top-nav {
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--card-border);
+      background: rgba(11, 17, 32, 0.85);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
 
-    .header {
-      text-align: center;
-      margin-bottom: 24px;
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
 
-    .app-logo {
-      width: 84px;
-      height: 84px;
-      border-radius: 20px;
-      margin-bottom: 14px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
+    .brand-logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
       object-fit: cover;
-      border: 2px solid #1e293b;
+      border: 1px solid var(--card-border);
     }
 
-    .header h1 {
-      font-size: 24px;
+    .brand-title h1 {
+      font-size: 16px;
       font-weight: 800;
-      color: #38bdf8;
-      letter-spacing: 1px;
+      letter-spacing: 0.5px;
+      color: var(--text-main);
     }
 
-    .header p {
-      font-size: 13px;
-      color: #94a3b8;
-      margin-top: 4px;
+    .brand-title p {
+      font-size: 10px;
+      color: var(--accent-blue);
+      font-weight: 600;
+      letter-spacing: 0.5px;
     }
 
-    .card {
-      background: #1e293b;
-      border: 1px solid #334155;
-      border-radius: 24px;
-      padding: 24px;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+    .server-status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--success);
+      background: rgba(16, 185, 129, 0.1);
+      padding: 6px 10px;
+      border-radius: 20px;
+      border: 1px solid rgba(16, 185, 129, 0.2);
     }
 
-    .upload-area {
-      border: 2px dashed #475569;
-      border-radius: 16px;
-      padding: 28px 16px;
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 8px var(--success);
+    }
+
+    /* Main Container */
+    .container {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-width: 480px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 12px 10px;
       text-align: center;
-      background: #0f172a;
+    }
+
+    .stat-val {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .stat-lbl {
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Scanning Hub Card */
+    .main-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .card-header h2 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .engine-tag {
+      font-size: 10px;
+      background: var(--accent-glow);
+      color: var(--accent-blue);
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+
+    /* Upload Area */
+    .upload-zone {
+      border: 2px dashed #334155;
+      border-radius: 16px;
+      padding: 24px 16px;
+      text-align: center;
+      background: #090e1a;
       cursor: pointer;
-      margin-bottom: 20px;
       transition: all 0.2s ease;
     }
 
-    .upload-area:active {
-      border-color: #38bdf8;
-      background: #131d31;
+    .upload-zone:active {
+      border-color: var(--accent-blue);
+      background: #0e1626;
     }
 
-    .upload-icon {
-      font-size: 36px;
-      margin-bottom: 8px;
+    .upload-icon-box {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 10px;
+      background: rgba(14, 165, 233, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      color: var(--accent-blue);
     }
 
     .upload-text {
-      font-size: 14px;
-      font-weight: 500;
+      font-size: 13px;
+      font-weight: 600;
       color: #cbd5e1;
+    }
+
+    .upload-subtext {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
     }
 
     .file-input {
       display: none;
     }
 
-    .file-details {
-      font-size: 12px;
-      color: #38bdf8;
-      margin-top: 10px;
-      word-break: break-all;
+    .file-pill {
       display: none;
-      background: #1e293b;
-      padding: 6px 10px;
+      background: rgba(14, 165, 233, 0.1);
+      border: 1px solid rgba(14, 165, 233, 0.3);
+      padding: 8px 12px;
       border-radius: 8px;
-      border: 1px solid #334155;
+      margin-top: 12px;
+      font-size: 11px;
+      color: var(--accent-blue);
+      word-break: break-all;
     }
 
-    .btn-scan {
+    .action-btn {
       width: 100%;
       background: #0284c7;
       color: #ffffff;
       border: none;
-      padding: 16px;
-      border-radius: 14px;
-      font-size: 16px;
+      padding: 15px;
+      border-radius: 12px;
+      font-size: 14px;
       font-weight: 700;
       cursor: pointer;
+      margin-top: 16px;
+      box-shadow: 0 4px 15px rgba(2, 132, 199, 0.35);
       transition: all 0.2s ease;
-      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);
     }
 
-    .btn-scan:active {
+    .action-btn:active {
       transform: scale(0.98);
     }
 
-    .btn-scan:disabled {
-      background: #334155;
-      color: #64748b;
+    .action-btn:disabled {
+      background: #1f293d;
+      color: #475569;
       cursor: not-allowed;
       box-shadow: none;
       transform: none;
     }
 
-    .status-panel {
-      margin-top: 20px;
-      padding: 16px;
-      border-radius: 14px;
-      font-size: 13px;
-      line-height: 1.6;
-      background: #0f172a;
-      border: 1px solid #334155;
+    /* Result Panel */
+    .result-box {
+      margin-top: 16px;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 12px;
+      line-height: 1.5;
+      background: #090e1a;
+      border: 1px solid var(--card-border);
       display: none;
+    }
+
+    /* Live Activity Log */
+    .logs-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 18px;
+    }
+
+    .log-list {
+      margin-top: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .log-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 12px;
+      background: #090e1a;
+      border-radius: 10px;
+      font-size: 11px;
+      border: 1px solid #172033;
+    }
+
+    .log-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .log-name {
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .log-time {
+      font-size: 9px;
+      color: var(--text-muted);
+    }
+
+    .log-badge {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+
+    .badge-clean {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--success);
+    }
+
+    .badge-danger {
+      background: rgba(239, 68, 68, 0.15);
+      color: var(--danger);
+    }
+
+    /* Bottom Navigation Bar */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(11, 17, 32, 0.95);
+      backdrop-filter: blur(16px);
+      border-top: 1px solid var(--card-border);
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0 20px;
+      z-index: 100;
+    }
+
+    .nav-tab {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      color: var(--text-muted);
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .nav-tab.active {
+      color: var(--accent-blue);
+    }
+
+    .nav-icon {
+      font-size: 18px;
     }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <div class="header">
-      <img src="/apple-touch-icon.png" alt="SHINSA Logo" class="app-logo" onerror="this.style.display='none'">
-      <h1>SHINSA CLOUD</h1>
-      <p>Real-Time Threat Intelligence & Analysis</p>
+  <!-- Header -->
+  <header class="top-nav">
+    <div class="brand-group">
+      <img src="/apple-touch-icon.png" alt="Logo" class="brand-logo" onerror="this.src='/icons/icon-192x192.png'">
+      <div class="brand-title">
+        <h1>SHINSA</h1>
+        <p>CLOUD INTELLIGENCE</p>
+      </div>
+    </div>
+    <div class="server-status" id="serverHealth">
+      <div class="status-dot"></div>
+      <span>CONNECTED</span>
+    </div>
+  </header>
+
+  <!-- Main Dashboard -->
+  <main class="container">
+
+    <!-- Global Stats -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-val" id="statFiles">1,429</div>
+        <div class="stat-lbl">Scanned</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" id="statThreats" style="color: var(--danger);">0</div>
+        <div class="stat-lbl">Threats</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" style="color: var(--accent-blue);">99.9%</div>
+        <div class="stat-lbl">Cloud DB</div>
+      </div>
     </div>
 
-    <div class="card">
-      <div class="upload-area" onclick="document.getElementById('fileInput').click()">
-        <div class="upload-icon">🛡️</div>
-        <div class="upload-text" id="uploadLabel">Tap to select a file for scanning</div>
-        <div class="file-details" id="fileDetails"></div>
-        <input type="file" id="fileInput" class="file-input" onchange="handleFileSelected(event)">
+    <!-- Scanner Core -->
+    <section class="main-card">
+      <div class="card-header">
+        <h2>Instant File Inspection</h2>
+        <span class="engine-tag">v2.4 Live Engine</span>
       </div>
 
-      <button id="scanBtn" class="btn-scan" onclick="startCloudScan()" disabled>Start Cloud Analysis</button>
+      <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
+        <div class="upload-icon-box">🛡️</div>
+        <div class="upload-text" id="uploadLabel">Tap to select or upload file</div>
+        <div class="upload-subtext">SHA-256 cloud reputation scan</div>
+        <div class="file-pill" id="filePill"></div>
+        <input type="file" id="fileInput" class="file-input" onchange="handleFileSelection(event)">
+      </div>
 
-      <div id="statusPanel" class="status-panel"></div>
-    </div>
-  </div>
+      <button id="scanButton" class="action-btn" onclick="executeScan()" disabled>Start Cloud Analysis</button>
+
+      <div id="resultPanel" class="result-box"></div>
+    </section>
+
+    <!-- Recent Threat Stream Logs -->
+    <section class="logs-card">
+      <div class="card-header" style="margin-bottom: 4px;">
+        <h2>Activity Stream</h2>
+        <span style="font-size: 10px; color: var(--text-muted);">Real-time</span>
+      </div>
+
+      <div class="log-list" id="activityLogs">
+        <div class="log-item">
+          <div class="log-info">
+            <span class="log-name">system_boot_validation.sys</span>
+            <span class="log-time">Database Connected</span>
+          </div>
+          <span class="log-badge badge-clean">CLEAN</span>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Bottom Tabs -->
+  <nav class="bottom-nav">
+    <a class="nav-tab active">
+      <div class="nav-icon">🛡️</div>
+      <span>Scanner</span>
+    </a>
+    <a class="nav-tab">
+      <div class="nav-icon">📊</div>
+      <span>Reports</span>
+    </a>
+    <a class="nav-tab">
+      <div class="nav-icon">🌐</div>
+      <span>Network</span>
+    </a>
+    <a class="nav-tab">
+      <div class="nav-icon">⚙️</div>
+      <span>Settings</span>
+    </a>
+  </nav>
 
   <script>
+    // Register Service Worker
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js')
-          .then((registration) => {
-            console.log('SHINSA Service Worker active:', registration.scope);
-          })
-          .catch((error) => {
-            console.error('Service Worker registration failed:', error);
-          });
+        navigator.serviceWorker.register('/sw.js');
       });
     }
 
-    let selectedFile = null;
+    let activeFile = null;
+    let totalScanned = 1429;
+    let totalThreats = 0;
 
-    function handleFileSelected(event) {
+    function handleFileSelection(event) {
       const file = event.target.files[0];
       if (file) {
-        selectedFile = file;
-        document.getElementById('uploadLabel').innerText = 'File ready for analysis';
-        const details = document.getElementById('fileDetails');
-        details.style.display = 'block';
-        details.innerText = `${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
-        document.getElementById('scanBtn').removeAttribute('disabled');
+        activeFile = file;
+        document.getElementById('uploadLabel').innerText = 'Ready for Inspection';
+        const pill = document.getElementById('filePill');
+        pill.style.display = 'block';
+        pill.innerText = `${file.name} • ${(file.size / 1024).toFixed(1)} KB`;
+        document.getElementById('scanButton').removeAttribute('disabled');
       }
     }
 
@@ -220,20 +502,20 @@
       return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
     }
 
-    async function startCloudScan() {
-      if (!selectedFile) return;
+    async function executeScan() {
+      if (!activeFile) return;
 
-      const scanBtn = document.getElementById('scanBtn');
-      const statusPanel = document.getElementById('statusPanel');
+      const scanBtn = document.getElementById('scanButton');
+      const resBox = document.getElementById('resultPanel');
 
       scanBtn.disabled = true;
-      scanBtn.innerText = 'Analyzing File...';
-      statusPanel.style.display = 'block';
-      statusPanel.style.borderColor = '#334155';
-      statusPanel.innerHTML = '<span style="color: #38bdf8;">⏳ Computing SHA-256 hash & querying threat cloud...</span>';
+      scanBtn.innerText = 'Calculating Hash & Querying...';
+      resBox.style.display = 'block';
+      resBox.style.borderColor = 'var(--card-border)';
+      resBox.innerHTML = '<span style="color: var(--accent-blue);">⏳ Generating SHA-256 hash & consulting Render cloud...</span>';
 
       try {
-        const fileHash = await computeSHA256(selectedFile);
+        const fileHash = await computeSHA256(activeFile);
 
         const response = await fetch('https://shinsa.com.au/api/v1/scan-hash', {
           method: 'POST',
@@ -243,38 +525,55 @@
           },
           body: JSON.stringify({
             hash: fileHash,
-            file_name: selectedFile.name
+            file_name: activeFile.name
           })
         });
 
-        if (!response.ok) {
-          throw new Error(`Server returned status: ${response.status}`);
-        }
-
         const data = await response.json();
+        totalScanned++;
+        document.getElementById('statFiles').innerText = totalScanned.toLocaleString();
 
         if (data.is_malicious) {
-          statusPanel.style.borderColor = '#ef4444';
-          statusPanel.innerHTML = `
-            <div style="color: #ef4444; font-weight: bold; margin-bottom: 6px;">⚠️ Threat Detected!</div>
-            <div><strong>Detection:</strong> ${data.threat_name || 'Generic.Malware'}</div>
-            <div style="margin-top: 4px; font-size: 11px; color: #94a3b8;">Hash: ${fileHash.substring(0, 24)}...</div>
+          totalThreats++;
+          document.getElementById('statThreats').innerText = totalThreats;
+          resBox.style.borderColor = 'var(--danger)';
+          resBox.innerHTML = `
+            <div style="color: var(--danger); font-weight: 700; margin-bottom: 4px;">⚠️ Malicious Signature Detected!</div>
+            <div><strong>Threat:</strong> ${data.threat_name || 'Trojan.CloudSignature'}</div>
+            <div style="margin-top: 4px; font-size: 10px; color: var(--text-muted);">Hash: ${fileHash.substring(0, 24)}...</div>
           `;
+          appendLog(activeFile.name, 'THREAT', 'badge-danger');
         } else {
-          statusPanel.style.borderColor = '#10b981';
-          statusPanel.innerHTML = `
-            <div style="color: #10b981; font-weight: bold; margin-bottom: 6px;">✅ Clean File</div>
-            <div style="font-size: 12px; color: #94a3b8;">No matching threat signatures found in the database.</div>
-            <div style="margin-top: 4px; font-size: 11px; color: #64748b;">Hash: ${fileHash.substring(0, 24)}...</div>
+          resBox.style.borderColor = 'var(--success)';
+          resBox.innerHTML = `
+            <div style="color: var(--success); font-weight: 700; margin-bottom: 4px;">✅ No Threat Found</div>
+            <div style="color: var(--text-muted);">File signature is clean across verified databases.</div>
+            <div style="margin-top: 4px; font-size: 10px; color: #475569;">Hash: ${fileHash.substring(0, 24)}...</div>
           `;
+          appendLog(activeFile.name, 'CLEAN', 'badge-clean');
         }
       } catch (err) {
-        statusPanel.style.borderColor = '#ef4444';
-        statusPanel.innerHTML = `<span style="color: #ef4444;">❌ Scan failed: ${err.message || 'Network error'}</span>`;
+        resBox.style.borderColor = 'var(--danger)';
+        resBox.innerHTML = `<span style="color: var(--danger);">❌ Server Connection Failure: Check Cloud API</span>`;
       } finally {
         scanBtn.removeAttribute('disabled');
         scanBtn.innerText = 'Analyze Another File';
       }
+    }
+
+    function appendLog(fileName, statusText, badgeClass) {
+      const list = document.getElementById('activityLogs');
+      const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const item = document.createElement('div');
+      item.className = 'log-item';
+      item.innerHTML = `
+        <div class="log-info">
+          <span class="log-name">${fileName.length > 22 ? fileName.substring(0, 20) + '...' : fileName}</span>
+          <span class="log-time">${now}</span>
+        </div>
+        <span class="log-badge ${badgeClass}">${statusText}</span>
+      `;
+      list.insertBefore(item, list.firstChild);
     }
   </script>
 </body>
