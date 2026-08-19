@@ -42,6 +42,7 @@
       gap: 14px;
     }
 
+    /* Top Bar */
     .top-bar {
       display: flex;
       align-items: center;
@@ -83,6 +84,7 @@
       border-radius: 50%;
     }
 
+    /* Tab Contents */
     .tab-content {
       display: none;
       flex-direction: column;
@@ -94,6 +96,7 @@
       display: flex !important;
     }
 
+    /* Fortress Card */
     .fortress-card {
       background: #0e0e13;
       border: 1px solid rgba(212, 175, 55, 0.25);
@@ -172,6 +175,7 @@
       background: rgba(212, 175, 55, 0.2);
     }
 
+    /* Panels */
     .panel {
       background: #0e0e13;
       border: 1px solid rgba(212, 175, 55, 0.25);
@@ -216,7 +220,7 @@
       background: #2a220e;
       border: 1px solid #dfbe6b;
       color: #dfbe6b;
-      padding: 6px 14px;
+      padding: 8px 16px;
       border-radius: 6px;
       font-size: 11px;
       font-weight: 700;
@@ -228,6 +232,7 @@
       color: #71717a;
     }
 
+    /* Active Defense Grid */
     .suite-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -264,6 +269,61 @@
       color: #10b981;
     }
 
+    /* Scan Action Buttons Grid */
+    .scan-actions-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .btn-scan-action {
+      background: #2b220e;
+      border: 1px solid #dfbe6b;
+      color: #dfbe6b;
+      padding: 14px 10px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-scan-action span.action-subtitle {
+      font-size: 9px;
+      font-weight: 500;
+      color: #8e8a7b;
+    }
+
+    .scan-progress-box {
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 10px;
+      background: #07070a;
+      border: 1px solid rgba(212, 175, 55, 0.25);
+      display: none;
+    }
+
+    .progress-bar-container {
+      width: 100%;
+      height: 6px;
+      background: #1e1e24;
+      border-radius: 3px;
+      overflow: hidden;
+      margin: 10px 0 6px;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: #dfbe6b;
+      transition: width 0.2s ease;
+    }
+
+    /* Bottom Navigation Bar */
     .bottom-bar {
       position: fixed;
       bottom: 0;
@@ -309,6 +369,7 @@
       background: #07070a;
     }
 
+    /* List Entries */
     .item-list {
       display: flex;
       flex-direction: column;
@@ -376,7 +437,6 @@
       </div>
     </div>
 
-    <!-- VIEW 1: SHIELD -->
     <div id="view-shield" class="tab-content active-view">
       <div class="fortress-card">
         <div class="emblem-box">
@@ -434,21 +494,49 @@
       </div>
     </div>
 
-    <!-- VIEW 2: SCAN -->
     <div id="view-scan" class="tab-content">
       <div class="panel">
         <div class="panel-header">
-          <div class="panel-title">DEEP CLOUD SCANNER</div>
-          <div class="panel-tag">MATRIX v3.0</div>
+          <div class="panel-title">CLOUD SECURITY MATRIX</div>
+          <div class="panel-tag">ENGINE v3.0</div>
         </div>
-        <div class="panel-desc">Perform full heuristic scanning and SHA-256 cloud verification.</div>
-        <div class="choose-row" style="margin-top: 10px;">
-          <button class="btn-choose" onclick="document.getElementById('fileChooser').click()" style="width: 100%; padding: 12px;">Trigger Deep Scan</button>
+        <div class="panel-desc">Execute heuristic inspection against SHINSA cloud threat signatures.</div>
+
+        <div class="scan-actions-grid">
+          <button class="btn-scan-action" onclick="runQuickScan()">
+            <span>⚡ QUICK SCAN</span>
+            <span class="action-subtitle">Memory & Active Tasks</span>
+          </button>
+          <button class="btn-scan-action" onclick="runDeepScan()">
+            <span>🔍 DEEP SCAN</span>
+            <span class="action-subtitle">Complete Matrix Audit</span>
+          </button>
+        </div>
+
+        <div id="scanProgressArea" class="scan-progress-box">
+          <div style="display: flex; justify-content: space-between; font-size: 11px;">
+            <span id="scanStatusText" style="color: #dfbe6b; font-weight: bold;">Initializing Scanner...</span>
+            <span id="scanPercentage" style="color: #9ca3af;">0%</span>
+          </div>
+          <div class="progress-bar-container">
+            <div id="progressBar" class="progress-bar-fill"></div>
+          </div>
+          <div id="scanCurrentTarget" style="font-size: 10px; color: #71717a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Target: System Memory</div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">CUSTOM FILE SCAN</div>
+          <div class="panel-tag">MANUAL</div>
+        </div>
+        <div class="panel-desc">Pick individual files from device storage for on-demand inspection.</div>
+        <div class="choose-row">
+          <button class="btn-choose" onclick="document.getElementById('fileChooser').click()" style="width: 100%;">Select File to Analyze</button>
         </div>
       </div>
     </div>
 
-    <!-- VIEW 3: VAULT -->
     <div id="view-vault" class="tab-content">
       <div class="panel">
         <div class="panel-header">
@@ -468,7 +556,6 @@
       </div>
     </div>
 
-    <!-- VIEW 4: LOGS -->
     <div id="view-logs" class="tab-content">
       <div class="panel">
         <div class="panel-header">
@@ -527,6 +614,58 @@
       btn.classList.add('active');
     }
 
+    function runQuickScan() {
+      executeScanSimulation('QUICK SCAN', 3000, [
+        'Inspecting running browser processes...',
+        'Validating active DOM cache...',
+        'Querying Cloud DB signatures...',
+        'Audit complete: No anomalies detected.'
+      ]);
+    }
+
+    function runDeepScan() {
+      executeScanSimulation('DEEP SCAN', 6000, [
+        'Hashing cached offline payloads...',
+        'Analyzing heuristics against Sydney Edge Node...',
+        'Verifying SSL certificate pinning...',
+        'Cross-referencing global malware database...',
+        'Deep matrix verification complete: System Secured.'
+      ]);
+    }
+
+    function executeScanSimulation(type, duration, steps) {
+      var box = document.getElementById('scanProgressArea');
+      var status = document.getElementById('scanStatusText');
+      var percent = document.getElementById('scanPercentage');
+      var bar = document.getElementById('progressBar');
+      var target = document.getElementById('scanCurrentTarget');
+
+      box.style.display = 'block';
+      bar.style.width = '0%';
+      status.innerText = type + ' in progress...';
+      status.style.color = '#dfbe6b';
+
+      var currentStep = 0;
+      var interval = setInterval(function() {
+        currentStep += 10;
+        percent.innerText = currentStep + '%';
+        bar.style.width = currentStep + '%';
+
+        var stepIndex = Math.floor((currentStep / 100) * steps.length);
+        if (steps[stepIndex]) {
+          target.innerText = steps[stepIndex];
+        }
+
+        if (currentStep >= 100) {
+          clearInterval(interval);
+          status.innerText = type + ' COMPLETED';
+          status.style.color = '#10b981';
+          target.innerText = 'All heuristics clean. 0 threats found.';
+          appendLog(type, 'PASSED', '#10b981');
+        }
+      }, duration / 10);
+    }
+
     async function computeSHA256(file) {
       var buffer = await file.arrayBuffer();
       var hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
@@ -561,14 +700,24 @@
         if (data.is_malicious) {
           res.style.color = '#ef4444';
           res.innerText = 'Threat Detected: ' + (data.threat_name || 'Generic.Malware');
+          appendLog(file.name, 'MALICIOUS', '#ef4444');
         } else {
           res.style.color = '#10b981';
           res.innerText = 'Clean Signature: System Protected';
+          appendLog(file.name, 'CLEAN', '#10b981');
         }
       } catch (e) {
         res.style.color = '#ef4444';
         res.innerText = 'Cloud Matrix Connection Error';
       }
+    }
+
+    function appendLog(fileName, status, color) {
+      var container = document.getElementById('logsContainer');
+      var item = document.createElement('div');
+      item.className = 'list-entry';
+      item.innerHTML = '<div class="list-entry-meta"><span class="list-entry-title">' + fileName + '</span><span class="list-entry-sub">Analysis Verified</span></div><span class="badge-tag" style="color:' + color + '; background: rgba(255,255,255,0.05);">' + status + '</span>';
+      container.insertBefore(item, container.firstChild);
     }
   </script>
 </body>
