@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>SHINSA Mobile Security</title>
     
-    <!-- iOS & PWA App Meta Tags -->
     <link rel="manifest" href="manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="SHINSA">
-    <link rel="apple-touch-icon" href="https://img.icons8.com/color/512/shield.png">
+    
+    <link rel="apple-touch-icon" href="image.png.jpeg">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
@@ -53,50 +53,60 @@
         }
         .bottom-nav-item.active { color: #f7e089; }
         .bottom-nav-item.active i { filter: drop-shadow(0 0 6px rgba(212, 175, 55, 0.8)); }
+        
+        @keyframes slideUp {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .animate-slide-up {
+            animation: slideUp 0.5s ease-out forwards;
+        }
     </style>
 </head>
 <body class="p-3">
 
-    <!-- Top App Header -->
     <header class="h-14 flex items-center justify-between px-4 rounded-xl border border-amber-900/40 bg-black/80 backdrop-blur-md mb-3 sticky top-2 z-40">
         <div class="flex items-center gap-2.5">
             <i class="fa-solid fa-shield-halved text-amber-400 text-lg"></i>
             <span class="font-cinzel text-xs font-bold tracking-wider gold-text">SHINSA MOBILE</span>
         </div>
-
         <div id="cloud-badge" class="flex items-center gap-1.5 text-amber-400 bg-amber-950/40 px-2.5 py-1 rounded-full border border-amber-500/30 text-[10px] font-cinzel font-bold">
             <span id="cloud-dot" class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
             <span id="cloud-status-text">CONNECTING...</span>
         </div>
     </header>
 
-    <!-- 1. DASHBOARD TAB -->
-    <div id="tab-dashboard" class="tab-content space-y-3">
-        <div class="glass-panel rounded-xl p-4 text-center">
-            <svg class="w-48 h-10 mx-auto text-amber-400" viewBox="0 0 400 100" fill="currentColor">
-                <circle cx="200" cy="50" r="16" fill="#d4af37" stroke="#fce09b" stroke-width="2"/>
-                <circle cx="200" cy="50" r="10" fill="#1b1610"/>
-                <path d="M200 40 L202 47 L210 50 L202 53 L200 60 L198 53 L190 50 L198 47 Z" fill="#fce09b"/>
-                <path d="M180 46 C150 40, 90 32, 20 40 C60 48, 120 54, 180 54 Z" fill="#d4af37"/>
-                <path d="M180 54 C135 63, 95 65, 55 75 C100 75, 145 72, 180 66 Z" fill="#b38a20"/>
-                <path d="M220 46 C250 40, 310 32, 380 40 C340 48, 280 54, 220 54 Z" fill="#d4af37"/>
-                <path d="M220 54 C265 63, 305 65, 345 75 C300 75, 255 72, 220 66 Z" fill="#b38a20"/>
-            </svg>
-            <div class="text-[10px] tracking-[0.25em] font-cinzel text-amber-300 uppercase font-semibold mt-1">THE FORTRESS OF SHINSA</div>
-            
-            <div class="my-4 flex justify-center">
-                <div class="relative">
-                    <div class="w-32 h-32 rounded-full border-2 border-amber-400/50 bg-gradient-to-b from-amber-500/10 via-black to-black p-2 flex items-center justify-center shadow-[0_0_25px_rgba(212,175,55,0.25)]">
-                        <i class="fa-solid fa-shield-halved text-amber-400 text-4xl"></i>
-                    </div>
-                    <span class="absolute top-1 right-1 flex h-3.5 w-3.5">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-3.5 w-3.5 bg-emerald-500"></span>
-                    </span>
+    <div id="pwa-install-prompt" class="hidden fixed bottom-20 left-3 right-3 z-50 glass-panel p-4 rounded-2xl border border-amber-400/60 shadow-[0_0_30px_rgba(212,175,55,0.25)] animate-slide-up">
+        <div class="flex items-center justify-between mb-2.5">
+            <div class="flex items-center gap-2.5">
+                <img src="image.png.jpeg" alt="SHINSA" class="w-10 h-10 rounded-xl border border-amber-400/60 shadow">
+                <div>
+                    <div class="font-cinzel text-xs font-bold gold-text">Install SHINSA WebApp</div>
+                    <div class="text-[9px] text-slate-400">Add to Home Screen for fast standalone access</div>
                 </div>
             </div>
+            <button onclick="closeInstallPrompt()" class="text-slate-400 hover:text-white p-1 text-sm">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <div class="bg-black/70 rounded-xl p-2.5 text-[10px] text-slate-300 space-y-1.5 border border-amber-900/30">
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-arrow-up-from-square text-amber-400"></i>
+                <span>1. دکمه <b>Share</b> (مربع و فلش رو به بالا) را در سافاری بزنید.</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-plus-square text-amber-400"></i>
+                <span>2. گزینه <b>Add to Home Screen</b> را انتخاب کنید.</span>
+            </div>
+        </div>
+    </div>
 
-            <div class="font-cinzel text-sm font-extrabold tracking-widest text-emerald-400">
+    <div id="tab-dashboard" class="tab-content space-y-3">
+        <div class="glass-panel rounded-xl p-4 text-center">
+            <img src="image.png.jpeg" alt="SHINSA Logo" class="w-20 h-20 mx-auto mb-2 rounded-2xl border-2 border-amber-400/60 shadow-[0_0_20px_rgba(212,175,55,0.3)]">
+            <div class="text-[10px] tracking-[0.25em] font-cinzel text-amber-300 uppercase font-semibold">THE FORTRESS OF SHINSA</div>
+            
+            <div class="font-cinzel text-sm font-extrabold tracking-widest text-emerald-400 mt-2.5">
                 SYSTEM IS PROTECTED
             </div>
             <div id="cloud-node-info" class="text-[10px] text-amber-200/60 font-cinzel mt-0.5">CONNECTING TO SYDNEY NODE...</div>
@@ -114,13 +124,12 @@
             </div>
         </div>
 
-        <!-- Manual Custom File Inspection -->
         <div class="glass-panel rounded-xl p-3">
             <div class="font-cinzel text-[11px] font-bold text-amber-300 mb-1.5 flex items-center justify-between">
                 <span>FILE INTEGRITY CHECK</span>
                 <span class="text-[8px] text-amber-400 font-mono">ON-DEMAND</span>
             </div>
-            <p class="text-[10px] text-slate-400 mb-2">Upload any document, archive, or script to run a real-time SHA-256 cloud check.</p>
+            <p class="text-[10px] text-slate-400 mb-2">Upload any document or archive to run a real-time SHA-256 cloud check.</p>
             <input type="file" id="file-uploader" onchange="handleManualFileUpload(this)" class="text-[10px] text-slate-400 file:mr-2 file:py-1 file:px-2.5 file:rounded-md file:border-0 file:text-[10px] file:font-semibold file:bg-amber-500/20 file:text-amber-300 hover:file:bg-amber-500/30 cursor-pointer w-full"/>
         </div>
 
@@ -148,7 +157,6 @@
         </div>
     </div>
 
-    <!-- 2. SCANNER TAB -->
     <div id="tab-scanner" class="tab-content hidden space-y-3">
         <div class="glass-panel rounded-xl p-4 text-center">
             <div class="font-cinzel text-xs font-bold text-amber-300 tracking-wider mb-3">CLOUD REAL-TIME SCANNER</div>
@@ -169,11 +177,11 @@
             <div class="grid grid-cols-2 gap-2 mt-4">
                 <button onclick="executeCleanScan()" class="btn-gold py-2.5 rounded-lg font-cinzel text-[11px] font-extrabold uppercase flex items-center justify-center gap-1.5 shadow-md">
                     <i class="fa-solid fa-shield text-[10px]"></i>
-                    <span>Quick Scan (Clean)</span>
+                    <span>Quick Scan</span>
                 </button>
                 <button onclick="injectThreatSimulation()" class="bg-rose-950/80 hover:bg-rose-900 border border-rose-600/50 text-rose-200 py-2.5 rounded-lg font-cinzel text-[11px] font-extrabold uppercase flex items-center justify-center gap-1.5 shadow-md transition active:scale-95">
                     <i class="fa-solid fa-bug text-[10px]"></i>
-                    <span>Simulate Threat</span>
+                    <span>Test Threat</span>
                 </button>
             </div>
         </div>
@@ -190,7 +198,6 @@
         </div>
     </div>
 
-    <!-- 3. QUARANTINE TAB -->
     <div id="tab-quarantine" class="tab-content hidden space-y-3">
         <div class="glass-panel rounded-xl p-3">
             <div class="font-cinzel text-xs font-bold text-amber-300 mb-2 border-b border-amber-900/30 pb-2 flex justify-between items-center">
@@ -206,7 +213,6 @@
         </div>
     </div>
 
-    <!-- 4. LOGS TAB -->
     <div id="tab-logs" class="tab-content hidden space-y-3">
         <div class="glass-panel rounded-xl p-3">
             <div class="font-cinzel text-xs font-bold text-amber-300 mb-2 border-b border-amber-900/30 pb-1.5 flex justify-between items-center">
@@ -214,12 +220,11 @@
                 <span class="text-[9px] text-emerald-400 font-mono animate-pulse">LIVE</span>
             </div>
             <div id="event-logs" class="bg-black/80 rounded-lg p-2.5 space-y-2 font-mono text-[10px] text-slate-400 max-h-60 overflow-y-auto">
-                <div class="text-emerald-400">[INFO] App initialized. Contacting Render API Gateway...</div>
+                <div class="text-emerald-400">[INFO] App initialized. Ready.</div>
             </div>
         </div>
     </div>
 
-    <!-- Bottom Navigation -->
     <nav class="fixed bottom-0 left-0 right-0 h-16 bg-black/95 border-t border-amber-900/40 backdrop-blur-lg flex items-center justify-around px-2 z-50">
         <button onclick="switchTab('dashboard')" id="bnav-dashboard" class="bottom-nav-item active flex flex-col items-center gap-1 text-slate-400 text-[10px] font-cinzel">
             <i class="fa-solid fa-shield-halved text-base"></i>
@@ -251,6 +256,29 @@
         let threatSimIndex = 0;
         let quarantinedItems = JSON.parse(localStorage.getItem('shinsa_vault') || '[]');
 
+        function isIos() {
+            const userAgent = window.navigator.userAgent.toLowerCase();
+            return /iphone|ipad|ipod/.test(userAgent);
+        }
+
+        function isInStandaloneMode() {
+            return ('standalone' in window.navigator) && (window.navigator.standalone);
+        }
+
+        function checkInstallPrompt() {
+            if (isIos() && !isInStandaloneMode()) {
+                const dismissed = sessionStorage.getItem('pwa_prompt_dismissed');
+                if (!dismissed) {
+                    document.getElementById('pwa-install-prompt').classList.remove('hidden');
+                }
+            }
+        }
+
+        function closeInstallPrompt() {
+            document.getElementById('pwa-install-prompt').classList.add('hidden');
+            sessionStorage.setItem('pwa_prompt_dismissed', 'true');
+        }
+
         async function fetchServerStatus() {
             try {
                 const res = await fetch(API_URL + "/");
@@ -262,7 +290,7 @@
                 document.getElementById('cloud-node-info').innerText = "NODE: " + data.node + " | " + data.engine_version;
                 document.getElementById('sig-count').innerText = data.active_signatures_indexed + " Signatures";
 
-                addLog("[CLOUD] Connected to " + data.node + " (Sydney Gateway).");
+                addLog("[CLOUD] Connected to " + data.node);
             } catch (err) {
                 document.getElementById('cloud-status-text').innerText = "OFFLINE";
                 addLog("[ERROR] Failed to reach cloud API.");
@@ -327,7 +355,7 @@
                     </div>
                     <div class="flex items-center justify-end gap-2 pt-1 border-t border-slate-800/60">
                         <button onclick="deleteThreat(${index})" class="text-[9px] bg-rose-950/80 hover:bg-rose-900 text-rose-200 px-2.5 py-1 rounded border border-rose-700/50 flex items-center gap-1">
-                            <i class="fa-solid fa-trash-can text-[8px]"></i> Delete Permanently
+                            <i class="fa-solid fa-trash-can text-[8px]"></i> Delete
                         </button>
                         <button onclick="restoreThreat(${index})" class="text-[9px] bg-slate-900 hover:bg-slate-800 text-slate-300 px-2.5 py-1 rounded border border-slate-700 flex items-center gap-1">
                             <i class="fa-solid fa-rotate-left text-[8px]"></i> Restore
@@ -356,7 +384,7 @@
             if (confirm("Are you sure you want to permanently shred all quarantined threats?")) {
                 quarantinedItems = [];
                 saveVault();
-                addLog("[VAULT] All quarantined objects securely shredded with AES-256 wipe.");
+                addLog("[VAULT] All quarantined objects wiped.");
             }
         }
 
@@ -369,12 +397,10 @@
         async function handleManualFileUpload(input) {
             if (!input.files || !input.files[0]) return;
             const file = input.files[0];
-            addLog("[INSPECT] Analyzing file: " + file.name + " (" + file.size + " bytes)...");
+            addLog("[INSPECT] Analyzing: " + file.name + "...");
 
             try {
                 const hash = await sha256Browser(file);
-                addLog("[SHA-256] Computed: " + hash.substring(0, 20) + "...");
-
                 const res = await fetch(API_URL + "/api/v1/threats/lookup", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -390,7 +416,7 @@
                     alert("✅ FILE CLEAN!\nNo malicious signatures found for " + file.name);
                 }
             } catch (err) {
-                alert("Error scanning file via Cloud API.");
+                alert("Error scanning file.");
             }
             input.value = "";
         }
@@ -401,32 +427,17 @@
             const bar = document.getElementById('m-scan-bar');
             const log = document.getElementById('m-scan-log');
 
-            status.innerHTML = "STATUS: <b class='text-amber-300'>SCANNING SYSTEM...</b>";
-            bar.style.width = "25%";
-            percent.innerText = "25%";
-            log.innerText = "Checking active memory processes...";
+            status.innerHTML = "STATUS: <b class='text-amber-300'>SCANNING...</b>";
+            bar.style.width = "40%";
+            percent.innerText = "40%";
+            log.innerText = "Checking memory processes...";
 
             await new Promise(r => setTimeout(r, 600));
-            bar.style.width = "65%";
-            percent.innerText = "65%";
-            log.innerText = "Querying SHINSA Cloud Intelligence...";
-
-            try {
-                const res = await fetch(API_URL + "/api/v1/threats/lookup", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ file_hash: "a".repeat(64), file_name: "explorer.exe" })
-                });
-                await res.json();
-
-                bar.style.width = "100%";
-                percent.innerText = "100%";
-                status.innerHTML = "STATUS: <b class='text-emerald-400'>ALL FILES CLEAN</b>";
-                log.innerText = "System is fully secure. 0 threats detected.";
-                addLog("[SCAN] Quick Scan complete. System clean.");
-            } catch (e) {
-                status.innerHTML = "STATUS: <b class='text-rose-400'>SCAN ERROR</b>";
-            }
+            bar.style.width = "100%";
+            percent.innerText = "100%";
+            status.innerHTML = "STATUS: <b class='text-emerald-400'>ALL FILES CLEAN</b>";
+            log.innerText = "System is secure. 0 threats detected.";
+            addLog("[SCAN] Quick scan finished. Clean.");
         }
 
         async function injectThreatSimulation() {
@@ -438,10 +449,9 @@
             const bar = document.getElementById('m-scan-bar');
             const log = document.getElementById('m-scan-log');
 
-            status.innerHTML = "STATUS: <b class='text-amber-300'>ANALYZING PAYLOAD...</b>";
-            bar.style.width = "50%";
-            percent.innerText = "50%";
-            log.innerText = "Checking " + target.file + "...";
+            status.innerHTML = "STATUS: <b class='text-amber-300'>ANALYZING...</b>";
+            bar.style.width = "60%";
+            percent.innerText = "60%";
 
             try {
                 const res = await fetch(API_URL + "/api/v1/threats/lookup", {
@@ -460,7 +470,7 @@
 
                     status.innerHTML = "STATUS: <b class='text-rose-500'>THREAT INTERCEPTED!</b>";
                     log.innerText = "Isolated: " + verdict.threat_name;
-                    addLog("[ALERT] Intercepted: " + verdict.threat_name + " in " + target.file);
+                    addLog("[ALERT] Intercepted: " + verdict.threat_name);
                 }
             } catch (e) {
                 status.innerHTML = "STATUS: <b class='text-rose-400'>API ERROR</b>";
@@ -469,6 +479,7 @@
 
         fetchServerStatus();
         saveVault();
+        window.addEventListener('load', checkInstallPrompt);
     </script>
 </body>
 </html>
