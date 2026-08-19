@@ -5,16 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>SHINSA MOBILE</title>
 
-  <!-- iOS PWA -->
+  <!-- iOS Safari PWA Meta Tags -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="SHINSA">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="theme-color" content="#070709">
 
-  <!-- Icons -->
-  <link rel="icon" type="image/png" href="/apple-touch-icon.png">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-  <link rel="manifest" href="/manifest.json">
+  <!-- Icons with Cache Buster -->
+  <link rel="icon" type="image/png" href="/apple-touch-icon.png?v=3">
+  <link rel="shortcut icon" type="image/png" href="/apple-touch-icon.png?v=3">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=3">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=3">
+  <link rel="manifest" href="/manifest.json?v=3">
 
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800;900&family=Inter:wght@400;600;700&display=swap');
@@ -339,7 +342,7 @@
     <!-- Fortress Card -->
     <div class="fortress-card">
       <div class="emblem-box">
-        <img src="/apple-touch-icon.png" alt="SHINSA Core Logo" onerror="this.style.display='none'">
+        <img src="/apple-touch-icon.png?v=3" alt="SHINSA Core Logo" onerror="this.style.display='none'">
       </div>
       <div class="fortress-title">THE FORTRESS OF SHINSA</div>
       <div class="fortress-status">SYSTEM IS PROTECTED</div>
@@ -419,7 +422,7 @@
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function() {
-        navigator.serviceWorker.register('/sw.js');
+        navigator.serviceWorker.register('/sw.js?v=3');
       });
     }
 
