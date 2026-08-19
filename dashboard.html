@@ -9,7 +9,6 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="SHINSA">
-    
     <link rel="apple-touch-icon" href="image.png.jpeg">
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -22,7 +21,7 @@
             user-select: none;
             color: #cbd5e1;
             padding-top: env(safe-area-inset-top, 12px);
-            padding-bottom: calc(75px + env(safe-area-inset-bottom, 0px));
+            padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
         }
         .font-cinzel { font-family: 'Cinzel', serif; }
         .gold-text {
@@ -79,7 +78,7 @@
     <div id="pwa-install-prompt" class="hidden fixed bottom-20 left-3 right-3 z-50 glass-panel p-4 rounded-2xl border border-amber-400/60 shadow-[0_0_30px_rgba(212,175,55,0.25)] animate-slide-up">
         <div class="flex items-center justify-between mb-2.5">
             <div class="flex items-center gap-2.5">
-                <img src="image.png.jpeg" alt="SHINSA" class="w-10 h-10 rounded-xl border border-amber-400/60 shadow">
+                <img src="image.png.jpeg" onerror="this.src='https://img.icons8.com/color/512/shield.png'" alt="SHINSA" class="w-10 h-10 rounded-xl border border-amber-400/60 shadow object-cover">
                 <div>
                     <div class="font-cinzel text-xs font-bold gold-text">Install SHINSA WebApp</div>
                     <div class="text-[9px] text-slate-400">Add to Home Screen for fast standalone access</div>
@@ -92,18 +91,18 @@
         <div class="bg-black/70 rounded-xl p-2.5 text-[10px] text-slate-300 space-y-1.5 border border-amber-900/30">
             <div class="flex items-center gap-2">
                 <i class="fa-solid fa-arrow-up-from-square text-amber-400"></i>
-                <span>1. دکمه <b>Share</b> (مربع و فلش رو به بالا) را در سافاری بزنید.</span>
+                <span>1. Tap the <b class="text-white">Share</b> icon in Safari navigation bar.</span>
             </div>
             <div class="flex items-center gap-2">
                 <i class="fa-solid fa-plus-square text-amber-400"></i>
-                <span>2. گزینه <b>Add to Home Screen</b> را انتخاب کنید.</span>
+                <span>2. Select <b class="text-white">Add to Home Screen</b> to install.</span>
             </div>
         </div>
     </div>
 
     <div id="tab-dashboard" class="tab-content space-y-3">
         <div class="glass-panel rounded-xl p-4 text-center">
-            <img src="image.png.jpeg" alt="SHINSA Logo" class="w-20 h-20 mx-auto mb-2 rounded-2xl border-2 border-amber-400/60 shadow-[0_0_20px_rgba(212,175,55,0.3)]">
+            <img src="image.png.jpeg" onerror="this.src='https://img.icons8.com/color/512/shield.png'" alt="SHINSA Logo" class="w-20 h-20 mx-auto mb-2 rounded-2xl border-2 border-amber-400/60 shadow-[0_0_20px_rgba(212,175,55,0.3)] object-cover">
             <div class="text-[10px] tracking-[0.25em] font-cinzel text-amber-300 uppercase font-semibold">THE FORTRESS OF SHINSA</div>
             
             <div class="font-cinzel text-sm font-extrabold tracking-widest text-emerald-400 mt-2.5">
@@ -129,7 +128,7 @@
                 <span>FILE INTEGRITY CHECK</span>
                 <span class="text-[8px] text-amber-400 font-mono">ON-DEMAND</span>
             </div>
-            <p class="text-[10px] text-slate-400 mb-2">Upload any document or archive to run a real-time SHA-256 cloud check.</p>
+            <p class="text-[10px] text-slate-400 mb-2">Inspect any document or executable against the Cloud Intelligence Matrix.</p>
             <input type="file" id="file-uploader" onchange="handleManualFileUpload(this)" class="text-[10px] text-slate-400 file:mr-2 file:py-1 file:px-2.5 file:rounded-md file:border-0 file:text-[10px] file:font-semibold file:bg-amber-500/20 file:text-amber-300 hover:file:bg-amber-500/30 cursor-pointer w-full"/>
         </div>
 
