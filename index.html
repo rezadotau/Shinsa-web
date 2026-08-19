@@ -5,11 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>SHINSA MOBILE</title>
 
-  <!-- iOS PWA Meta Tags -->
+  <!-- iOS PWA -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="SHINSA">
-  <meta name="mobile-web-app-capable" content="yes">
   <meta name="theme-color" content="#070709">
 
   <!-- Icons -->
@@ -18,23 +17,25 @@
   <link rel="manifest" href="/manifest.json">
 
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800;900&family=Inter:wght@400;600;700&display=swap');
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       -webkit-tap-highlight-color: transparent;
     }
 
     body {
       background-color: #070709;
       color: #ffffff;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      padding: 16px;
-      padding-top: calc(env(safe-area-inset-top) + 12px);
-      padding-bottom: calc(env(safe-area-inset-bottom) + 80px);
+      padding: 14px;
+      padding-top: calc(env(safe-area-inset-top) + 10px);
+      padding-bottom: calc(env(safe-area-inset-bottom) + 85px);
     }
 
     .container {
@@ -54,22 +55,18 @@
       padding: 10px 14px;
       border: 1px solid rgba(212, 175, 55, 0.25);
       border-radius: 12px;
-      background: #0d0d11;
+      background: #0d0d12;
     }
 
     .brand {
       display: flex;
       align-items: center;
       gap: 8px;
-      color: #e2c974;
+      font-family: 'Cinzel', serif;
+      color: #dfbe6b;
       font-size: 13px;
       font-weight: 800;
-      letter-spacing: 1px;
-    }
-
-    .brand-icon {
-      font-size: 16px;
-      color: #e2c974;
+      letter-spacing: 1.2px;
     }
 
     .status-online {
@@ -91,28 +88,31 @@
       height: 6px;
       background: #10b981;
       border-radius: 50%;
+      box-shadow: 0 0 6px #10b981;
     }
 
-    /* Fortress Hero Card */
+    /* Fortress Card */
     .fortress-card {
-      background: #0f0f14;
+      background: #0e0e13;
       border: 1px solid rgba(212, 175, 55, 0.25);
       border-radius: 16px;
-      padding: 24px 16px 16px;
+      padding: 22px 16px 16px;
       text-align: center;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
     }
 
     .emblem-box {
-      width: 90px;
-      height: 90px;
+      width: 92px;
+      height: 92px;
       margin: 0 auto 16px;
       border: 1px solid rgba(212, 175, 55, 0.35);
-      border-radius: 18px;
-      background: #161512;
+      border-radius: 20px;
+      background: #14141a;
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
+      box-shadow: 0 0 20px rgba(223, 190, 107, 0.12);
     }
 
     .emblem-box img {
@@ -122,35 +122,38 @@
     }
 
     .fortress-title {
+      font-family: 'Cinzel', serif;
       font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 1.8px;
-      color: #e2c974;
-      margin-bottom: 8px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #dfbe6b;
+      margin-bottom: 6px;
       text-transform: uppercase;
     }
 
     .fortress-status {
+      font-family: 'Cinzel', serif;
       font-size: 16px;
       font-weight: 800;
       color: #10b981;
       letter-spacing: 0.8px;
       margin-bottom: 6px;
+      text-shadow: 0 0 8px rgba(16, 185, 129, 0.3);
     }
 
     .fortress-node {
       font-size: 9px;
       font-weight: 600;
-      color: #a1a1aa;
+      color: #9ca3af;
       letter-spacing: 0.5px;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
     }
 
     .fortress-meta {
       display: flex;
       justify-content: space-around;
       align-items: center;
-      background: #060608;
+      background: #07070a;
       border: 1px solid rgba(212, 175, 55, 0.2);
       border-radius: 8px;
       padding: 10px;
@@ -159,7 +162,7 @@
     }
 
     .fortress-meta strong {
-      color: #e2c974;
+      color: #dfbe6b;
     }
 
     .fortress-meta strong.green {
@@ -172,9 +175,9 @@
       background: rgba(212, 175, 55, 0.2);
     }
 
-    /* Section Boxes */
+    /* Section Panels */
     .panel {
-      background: #0f0f14;
+      background: #0e0e13;
       border: 1px solid rgba(212, 175, 55, 0.25);
       border-radius: 14px;
       padding: 14px;
@@ -188,16 +191,18 @@
     }
 
     .panel-title {
+      font-family: 'Cinzel', serif;
       font-size: 11px;
       font-weight: 800;
-      color: #e2c974;
+      color: #dfbe6b;
       letter-spacing: 0.8px;
     }
 
     .panel-tag {
+      font-family: 'Cinzel', serif;
       font-size: 9px;
       font-weight: 800;
-      color: #e2c974;
+      color: #dfbe6b;
     }
 
     .panel-desc {
@@ -214,9 +219,9 @@
     }
 
     .btn-choose {
-      background: #2b220e;
-      border: 1px solid #d4af37;
-      color: #e2c974;
+      background: #2a220e;
+      border: 1px solid #dfbe6b;
+      color: #dfbe6b;
       padding: 6px 14px;
       border-radius: 6px;
       font-size: 11px;
@@ -238,7 +243,7 @@
     }
 
     .suite-box {
-      background: #08080a;
+      background: #07070a;
       border: 1px solid rgba(212, 175, 55, 0.15);
       border-radius: 10px;
       padding: 14px 6px;
@@ -254,9 +259,10 @@
     }
 
     .suite-name {
-      font-size: 10px;
+      font-family: 'Cinzel', serif;
+      font-size: 9px;
       font-weight: 800;
-      color: #e2c974;
+      color: #dfbe6b;
       letter-spacing: 0.5px;
     }
 
@@ -272,13 +278,13 @@
       bottom: 0;
       left: 0;
       right: 0;
-      background: #08080a;
+      background: #07070a;
       border-top: 1px solid rgba(212, 175, 55, 0.2);
       display: flex;
       justify-content: space-around;
       padding-top: 10px;
       padding-bottom: calc(env(safe-area-inset-bottom) + 10px);
-      z-index: 100;
+      z-index: 1000;
     }
 
     .nav-link {
@@ -286,6 +292,7 @@
       flex-direction: column;
       align-items: center;
       gap: 4px;
+      font-family: 'Cinzel', serif;
       font-size: 9px;
       font-weight: 700;
       color: #52525b;
@@ -295,7 +302,7 @@
     }
 
     .nav-link.active {
-      color: #e2c974;
+      color: #dfbe6b;
     }
 
     .nav-icon {
@@ -309,6 +316,7 @@
       border-radius: 6px;
       display: none;
       border: 1px solid rgba(212, 175, 55, 0.3);
+      background: #07070a;
     }
   </style>
 </head>
@@ -316,10 +324,10 @@
 
   <div class="container">
 
-    <!-- Header -->
+    <!-- Top Header -->
     <div class="top-bar">
       <div class="brand">
-        <span class="brand-icon">🛡️</span>
+        <span>🛡️</span>
         <span>SHINSA MOBILE</span>
       </div>
       <div class="status-online">
@@ -328,10 +336,10 @@
       </div>
     </div>
 
-    <!-- Fortress Overview -->
+    <!-- Fortress Card -->
     <div class="fortress-card">
       <div class="emblem-box">
-        <img src="/apple-touch-icon.png" alt="SHINSA Core Emblem" onerror="this.style.display='none'">
+        <img src="/apple-touch-icon.png" alt="SHINSA Core Logo" onerror="this.style.display='none'">
       </div>
       <div class="fortress-title">THE FORTRESS OF SHINSA</div>
       <div class="fortress-status">SYSTEM IS PROTECTED</div>
@@ -403,7 +411,7 @@
       <span>VAULT</span>
     </a>
     <a class="nav-link">
-      <span class="nav-icon">&gt;_</span>
+      <span class="nav-icon">💻</span>
       <span>LOGS</span>
     </a>
   </nav>
@@ -416,27 +424,27 @@
     }
 
     async function computeSHA256(file) {
-      const buffer = await file.arrayBuffer();
-      const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
-      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      var buffer = await file.arrayBuffer();
+      var hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
+      var hashArray = Array.from(new Uint8Array(hashBuffer));
       return hashArray.map(function(b) {
         return b.toString(16).padStart(2, '0');
       }).join('');
     }
 
     async function inspectFile(event) {
-      const file = event.target.files[0];
+      var file = event.target.files[0];
       if (!file) return;
 
       document.getElementById('selectedFileName').innerText = file.name;
-      const res = document.getElementById('scanResult');
+      var res = document.getElementById('scanResult');
       res.style.display = 'block';
-      res.style.color = '#e2c974';
+      res.style.color = '#dfbe6b';
       res.innerText = 'Calculating Hash & Querying Matrix...';
 
       try {
-        const fileHash = await computeSHA256(file);
-        const response = await fetch('https://shinsa.com.au/api/v1/scan-hash', {
+        var fileHash = await computeSHA256(file);
+        var response = await fetch('https://shinsa.com.au/api/v1/scan-hash', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -445,7 +453,7 @@
           })
         });
 
-        const data = await response.json();
+        var data = await response.json();
         if (data.is_malicious) {
           res.style.color = '#ef4444';
           res.innerText = 'Threat Detected: ' + (data.threat_name || 'Generic.Malware');
