@@ -5,16 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>SHINSA Cloud Antivirus</title>
 
-  <!-- iOS PWA Meta Tags -->
+  <!-- iOS Safari PWA Configuration -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="SHINSA">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="theme-color" content="#0f172a">
+  <meta name="application-name" content="SHINSA">
 
-  <!-- Custom User Icon for iOS and Android -->
+  <!-- Application Icons -->
   <link rel="icon" type="image/png" href="/apple-touch-icon.png">
+  <link rel="shortcut icon" type="image/png" href="/apple-touch-icon.png">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="167x167" href="/apple-touch-icon.png">
   <link rel="manifest" href="/manifest.json">
 
   <style>
@@ -22,7 +27,8 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      -webkit-tap-highlight-color: transparent;
     }
 
     body {
@@ -46,12 +52,13 @@
     }
 
     .app-logo {
-      width: 80px;
-      height: 80px;
+      width: 84px;
+      height: 84px;
       border-radius: 20px;
-      margin-bottom: 12px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+      margin-bottom: 14px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
       object-fit: cover;
+      border: 2px solid #1e293b;
     }
 
     .header h1 {
@@ -70,33 +77,35 @@
     .card {
       background: #1e293b;
       border: 1px solid #334155;
-      border-radius: 20px;
+      border-radius: 24px;
       padding: 24px;
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
     }
 
     .upload-area {
       border: 2px dashed #475569;
-      border-radius: 14px;
-      padding: 24px 16px;
+      border-radius: 16px;
+      padding: 28px 16px;
       text-align: center;
       background: #0f172a;
       cursor: pointer;
       margin-bottom: 20px;
-      transition: border-color 0.2s ease;
+      transition: all 0.2s ease;
     }
 
     .upload-area:active {
       border-color: #38bdf8;
+      background: #131d31;
     }
 
     .upload-icon {
-      font-size: 32px;
+      font-size: 36px;
       margin-bottom: 8px;
     }
 
     .upload-text {
       font-size: 14px;
+      font-weight: 500;
       color: #cbd5e1;
     }
 
@@ -107,9 +116,13 @@
     .file-details {
       font-size: 12px;
       color: #38bdf8;
-      margin-top: 8px;
+      margin-top: 10px;
       word-break: break-all;
       display: none;
+      background: #1e293b;
+      padding: 6px 10px;
+      border-radius: 8px;
+      border: 1px solid #334155;
     }
 
     .btn-scan {
@@ -118,27 +131,34 @@
       color: #ffffff;
       border: none;
       padding: 16px;
-      border-radius: 12px;
+      border-radius: 14px;
       font-size: 16px;
       font-weight: 700;
       cursor: pointer;
-      box-shadow: 0 4px 14px 0 rgba(2, 132, 199, 0.39);
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);
+    }
+
+    .btn-scan:active {
+      transform: scale(0.98);
     }
 
     .btn-scan:disabled {
-      background: #475569;
+      background: #334155;
+      color: #64748b;
       cursor: not-allowed;
       box-shadow: none;
+      transform: none;
     }
 
     .status-panel {
       margin-top: 20px;
       padding: 16px;
-      border-radius: 12px;
+      border-radius: 14px;
       font-size: 13px;
       line-height: 1.6;
       background: #0f172a;
-      border: 1px solid #1e293b;
+      border: 1px solid #334155;
       display: none;
     }
   </style>
@@ -169,7 +189,13 @@
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js');
+        navigator.serviceWorker.register('/sw.js')
+          .then((registration) => {
+            console.log('SHINSA Service Worker active:', registration.scope);
+          })
+          .catch((error) => {
+            console.error('Service Worker registration failed:', error);
+          });
       });
     }
 
@@ -211,12 +237,19 @@
 
         const response = await fetch('https://shinsa.com.au/api/v1/scan-hash', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
           body: JSON.stringify({
             hash: fileHash,
             file_name: selectedFile.name
           })
         });
+
+        if (!response.ok) {
+          throw new Error(`Server returned status: ${response.status}`);
+        }
 
         const data = await response.json();
 
@@ -225,19 +258,19 @@
           statusPanel.innerHTML = `
             <div style="color: #ef4444; font-weight: bold; margin-bottom: 6px;">⚠️ Threat Detected!</div>
             <div><strong>Detection:</strong> ${data.threat_name || 'Generic.Malware'}</div>
-            <div style="margin-top: 4px; font-size: 11px; color: #94a3b8;">Hash: ${fileHash.substring(0, 16)}...</div>
+            <div style="margin-top: 4px; font-size: 11px; color: #94a3b8;">Hash: ${fileHash.substring(0, 24)}...</div>
           `;
         } else {
           statusPanel.style.borderColor = '#10b981';
           statusPanel.innerHTML = `
             <div style="color: #10b981; font-weight: bold; margin-bottom: 6px;">✅ Clean File</div>
-            <div style="font-size: 12px; color: #94a3b8;">No matching threat signatures found in the cloud database.</div>
-            <div style="margin-top: 4px; font-size: 11px; color: #64748b;">Hash: ${fileHash.substring(0, 16)}...</div>
+            <div style="font-size: 12px; color: #94a3b8;">No matching threat signatures found in the database.</div>
+            <div style="margin-top: 4px; font-size: 11px; color: #64748b;">Hash: ${fileHash.substring(0, 24)}...</div>
           `;
         }
       } catch (err) {
         statusPanel.style.borderColor = '#ef4444';
-        statusPanel.innerHTML = '<span style="color: #ef4444;">❌ Error communicating with cloud API.</span>';
+        statusPanel.innerHTML = `<span style="color: #ef4444;">❌ Scan failed: ${err.message || 'Network error'}</span>`;
       } finally {
         scanBtn.removeAttribute('disabled');
         scanBtn.innerText = 'Analyze Another File';
